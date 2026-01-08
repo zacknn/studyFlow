@@ -1,0 +1,35 @@
+@import "tailwindcss";
+
+@layer base {
+  /* Apply the transition to all relevant properties by default */
+  body {
+    @apply transition-colors duration-300 ease-in-out;
+  }
+  
+  /* Smooth transitions for theme switching on all elements */
+  *, *::before, *::after {
+    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 300ms;
+  }
+}
+
+/* Custom background patterns from your design */
+.bg-grid-pattern {
+  background-image: linear-gradient(to right, #80808012 1px, transparent 1px),
+    linear-gradient(to bottom, #80808012 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.bg-dot-pattern {
+  background-image: radial-gradient(#e5e7eb 1px, transparent 1px);
+  background-size: 16px 16px;
+}
+
+.dark .bg-dot-pattern {
+  background-image: radial-gradient(#334155 1px, transparent 1px);
+}
+
+.bg-stripe-pattern {
+  background-image: repeating-linear-gradient(45deg, transparent, transparent 10px, #e5e7eb 10px, #e5e7eb 11px);
+}
