@@ -1,0 +1,140 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id            String      @id @default(cuid())
+  name          String?
+  email         String      @unique
+  emailVerified Boolean     @default(false) @map("email_verified")
+  image         String?
+  // Auth fields
+  sessions      Session[]
+  accounts      Account[]
+  // App specific fields
+  posts         Post[]
+  aiHistory     AIHistory[]
+  createdAt     DateTime    
+  updatedAt     DateTime    
+
+  // Better Auth prefers lowercase table names usually, but optional
+  @@map("user")
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  userId    String   @map("user_id")
+  token     String   @unique // Renamed from sessionToken
+  expiresAt DateTime @map("expires_at") // Renamed from expires
+  ipAddress String?  @map("ip_address") // Better Auth tracks IP
+  userAgent String?  @map("user_agent") // Better Auth tracks User Agent
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime 
+  updatedAt DateTime 
+
+  @@map("session")
+  @@index([userId])
+}
+
+model Account {
+  id                    String    @id @default(cuid())
+  userId                String    @map("user_id")
+  accountId             String    @map("account_id") // Provider's ID (e.g. Google ID)
+  providerId            String    @map("provider_id") // e.g. "google"
+  accessToken           String?   @map("access_token") @db.Text
+  refreshToken          String?   @map("refresh_token") @db.Text
+  accessTokenExpiresAt  DateTime? @map("access_token_expires_at")
+  refreshTokenExpiresAt DateTime? @map("refresh_token_expires_at")
+  scope                 String?
+  idToken               String?   @map("id_token") @db.Text
+  password              String?   @map("password") // For email/pass auth
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime 
+  updatedAt DateTime 
+
+  @@map("account")
+  @@index([userId])
+}
+
+// Better Auth Verification (Email verification, Forgot password)
+
+model Verification {
+  id         String   @id @default(cuid())
+  identifier String
+  value      String   @db.Text
+  expiresAt  DateTime @map("expires_at")
+  createdAt  DateTime @map("created_at") // Optional
+
+  updatedAt DateTime 
+
+  @@map("verification")
+  @@index([identifier])
+}
+
+// --------------------------------------------------------
+// APP SPECIFIC MODELS (StudyFlow)
+// --------------------------------------------------------
+
+model Post {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  type        String? // "tutorial", "reference"
+  isPublic    Boolean  @default(true)
+  // Relations
+  authorId    String
+  author      User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  files       File[]
+  links       Link[]
+  // Analytics
+  views       Int      @default(0)
+  likes       Int      @default(0)
+  tags        String[] // Postgres supports arrays natively
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model File {
+  id        String   @id @default(cuid())
+  name      String
+  size      Int      @default(0) // Better to store bytes as Int/BigInt, format to "2.4MB" in frontend
+  mimeType  String
+  url       String
+  pages     Int?
+  postId    String
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade) // Added Cascade delete
+  createdAt DateTime @default(now())
+}
+
+model Link {
+  id        String   @id @default(cuid())
+  url       String
+  label     String?
+  postId    String
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+}
+
+model AIHistory {
+  id           String   @id @default(cuid())
+  inputText    String   @db.Text // Use Text for long AI prompts
+  responseText String   @db.Text // Use Text for long AI answers
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt    DateTime @default(now())
+}
