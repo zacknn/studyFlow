@@ -23,7 +23,7 @@ export default function AuthCTA() {
           </button>
         </form>
         <p className="mt-6 text-sm text-slate-400 dark:text-slate-500 text-center">
-          Already have an account? <Link href="#" className="text-rose-600 dark:text-rose-400 hover:underline">Sign in</Link>
+          Already have an account? <Link href="/login" className="text-rose-600 dark:text-rose-400 hover:underline">Sign in</Link>
         </p>
       </div>
     </div>

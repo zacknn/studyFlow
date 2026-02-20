@@ -1,0 +1,111 @@
+import Post from "@/types";
+// Mock data for testing
+export const mockPosts: Post[] = [
+  {
+    id: "1",
+    title: "Advanced Calculus Concepts",
+    description:
+      "Deep dive into derivatives, integrals, and their real-world applications in engineering.",
+    type: "tutorial",
+    isPublic: true,
+    author: {
+      id: "user1",
+      name: "Dr. Sarah Johnson",
+      image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah",
+    },
+    views: 1250,
+    likes: 89,
+    tags: ["calculus", "mathematics", "tutorials"],
+    createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
+    updatedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000),
+  },
+  {
+    id: "2",
+    title: "Quantum Physics Reference Guide",
+    description:
+      "Comprehensive reference for quantum mechanics principles and equations.",
+    type: "reference",
+    isPublic: true,
+    author: {
+      id: "user2",
+      name: "Prof. Michael Chen",
+      image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Michael",
+    },
+    views: 890,
+    likes: 145,
+    tags: ["physics", "quantum", "reference"],
+    createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),
+    updatedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
+  },
+  {
+    id: "3",
+    title: "World War II Historical Timeline",
+    description: "Detailed timeline of events during WWII with analysis.",
+    type: "tutorial",
+    isPublic: true,
+    author: {
+      id: "user3",
+      name: "Emma Williams",
+      image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Emma",
+    },
+    views: 2100,
+    likes: 234,
+    tags: ["history", "wwii", "timeline"],
+    createdAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000),
+    updatedAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
+  },
+  {
+    id: "4",
+    title: "Shakespeare's Impact on English Literature",
+    description:
+      "Exploring the profound influence of Shakespeare on modern literature and language.",
+    type: "reference",
+    isPublic: false,
+    author: {
+      id: "user4",
+      name: "James Patterson",
+      image: "https://api.dicebear.com/7.x/avataaars/svg?seed=James",
+    },
+    views: 456,
+    likes: 67,
+    tags: ["literature", "shakespeare", "english"],
+    createdAt: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000),
+    updatedAt: new Date(Date.now() - 12 * 24 * 60 * 60 * 1000),
+  },
+  {
+    id: "5",
+    title: "Biology: Cell Structure & Function",
+    description:
+      "Complete guide to understanding cellular components and their roles.",
+    type: "tutorial",
+    isPublic: true,
+    author: {
+      id: "user5",
+      name: "Dr. Lisa Anderson",
+      image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Lisa",
+    },
+    views: 1876,
+    likes: 312,
+    tags: ["biology", "cells", "science"],
+    createdAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
+    updatedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
+  },
+  {
+    id: "6",
+    title: "JavaScript Async/Await Patterns",
+    description:
+      "Master asynchronous programming with practical examples and best practices.",
+    type: "tutorial",
+    isPublic: true,
+    author: {
+      id: "user6",
+      name: "Alex Rodriguez",
+      image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Alex",
+    },
+    views: 3450,
+    likes: 521,
+    tags: ["javascript", "programming", "async"],
+    createdAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000),
+    updatedAt: new Date(Date.now() - 1 * 60 * 60 * 1000),
+  },
+];
