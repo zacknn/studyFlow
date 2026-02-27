@@ -9,6 +9,9 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@orpc/client": "^1.13.5",
+    "@orpc/contract": "^1.13.5",
+    "@orpc/server": "^1.13.5",
     "@prisma/adapter-pg": "^7.2.0",
     "@radix-ui/react-label": "^2.1.8",
     "@radix-ui/react-separator": "^1.1.8",
@@ -24,7 +27,8 @@
     "pg": "^8.16.3",
     "react": "19.2.3",
     "react-dom": "19.2.3",
-    "tailwind-merge": "^3.4.0"
+    "tailwind-merge": "^3.4.0",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@prisma/client": "^7.2.0",
