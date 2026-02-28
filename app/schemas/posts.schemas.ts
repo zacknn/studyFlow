@@ -66,7 +66,6 @@ export type Post = z.infer<typeof PostSchema>
 ========================================================= */
 
 export const CreatePostInputSchema = z.object({
-  id: z.cuid(),
   title: postTitle,
   description: postDescription,
   type: postType,
