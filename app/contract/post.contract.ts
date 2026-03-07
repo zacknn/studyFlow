@@ -1,5 +1,5 @@
-import { oc } from "@orpc/contract"
-import z from "zod"
+import { oc } from "@orpc/contract";
+import z from "zod";
 import {
   CreatePostInputSchema,
   DeletePostInputSchema,
@@ -8,7 +8,7 @@ import {
   PaginatedPostsSchema,
   PostOutputSchema,
   UpdatePostInputSchema,
-} from "../schemas/posts.schemas"
+} from "../schemas/posts.schemas";
 
 export const base = oc.errors({
   UNAUTHORIZED: {
@@ -29,9 +29,10 @@ export const base = oc.errors({
   },
   CONFLICT: {
     status: 409,
-    message: "the request could not be completed due to a conflict with the current state of the resource",
+    message:
+      "the request could not be completed due to a conflict with the current state of the resource",
   },
-})
+});
 
 export const CreatePostContract = base
   .route({
@@ -43,7 +44,7 @@ export const CreatePostContract = base
     tags: ["posts"],
   })
   .input(CreatePostInputSchema)
-  .output(PostOutputSchema)
+  .output(PostOutputSchema);
 
 export const UpdatePostContract = base
   .route({
@@ -54,7 +55,7 @@ export const UpdatePostContract = base
     tags: ["posts"],
   })
   .input(UpdatePostInputSchema)
-  .output(PostOutputSchema)
+  .output(PostOutputSchema);
 
 export const DeletePostContract = base
   .route({
@@ -65,7 +66,7 @@ export const DeletePostContract = base
     tags: ["posts"],
   })
   .input(DeletePostInputSchema)
-  .output(PostOutputSchema)
+  .output(PostOutputSchema);
 
 export const GetPostByIdContract = base
   .route({
@@ -75,8 +76,8 @@ export const GetPostByIdContract = base
     description: "Get a single post by its ID",
     tags: ["posts"],
   })
-  .input(GetPostByIdInputSchema)   // ✅ fixed
-  .output(PostOutputSchema)
+  .input(GetPostByIdInputSchema)
+  .output(PostOutputSchema);
 
 export const ListPostsContract = base
   .route({
@@ -87,4 +88,4 @@ export const ListPostsContract = base
     tags: ["posts"],
   })
   .input(ListPostsInputSchema)
-  .output(PaginatedPostsSchema)
+  .output(PaginatedPostsSchema);

@@ -2,7 +2,6 @@ import { implement } from "@orpc/server";
 import { contract } from "../contract";
 import prisma from "../lib/prisma";
 import { authMiddleware } from "../middleware/authMiddleware";
-import { error } from "console";
 
 const os = implement(contract).$context<{ headers: Headers }>();
 
@@ -34,6 +33,7 @@ export const CreatePost = os.Post.create
         authorId,
         isPublic: input.isPublic ?? true,
       },
+      include: { files: true, links: true },
     });
     return data;
   });
@@ -59,13 +59,13 @@ export const UpdatePost = os.Post.update
       throw errors.FORBIDDEN();
     }
 
+    const { id, ...bodyFields } = input;
     const updated = await prisma.post.update({
       where: {
-        id: input.id,
+        id,
       },
-      data: {
-        ...input,
-      },
+      data: bodyFields,
+      include: { files: true, links: true },
     });
     return updated;
   });
@@ -77,6 +77,7 @@ export const DeletePost = os.Post.delete
       where: {
         id: input.id,
       },
+      include: { files: true, links: true },
     });
     if (!post) {
       throw errors.NOT_FOUND({
@@ -91,12 +92,12 @@ export const DeletePost = os.Post.delete
       throw errors.FORBIDDEN();
     }
 
-    const deleted = await prisma.post.delete({
+    await prisma.post.delete({
       where: {
         id: input.id,
       },
     });
-    return deleted;
+    return post;
   });
 
 export const GetPostById = os.Post.getById
@@ -130,7 +131,7 @@ export const GetPostById = os.Post.getById
   });
 
 export const ListPosts = os.Post.list.handler(async ({ input }) => {
-  const { page, limit, type, tag, isPublic } = input
+  const { page, limit, type, tag, isPublic } = input;
 
   const [posts, total] = await prisma.$transaction([
     prisma.post.findMany({
@@ -150,7 +151,7 @@ export const ListPosts = os.Post.list.handler(async ({ input }) => {
         type,
       },
     }),
-  ])
+  ]);
 
-  return { data: posts, total, page, limit }
-})
+  return { data: posts, total, page, limit };
+});
