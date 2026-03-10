@@ -1,5 +1,5 @@
 "use client";
-
+import { Github } from "lucide-react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -31,23 +31,25 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
       return;
     }
 
-    const {data , error} = await authClient.signUp.email({
-      name: fullName,
-      email,
-      password,
-      callbackURL: "/private",
-    },{
-      onRequest: (ctx) => {
-        console.log("Signup request started", ctx);
+    const { data, error } = await authClient.signUp.email(
+      {
+        name: fullName,
+        email,
+        password,
+        callbackURL: "/private",
       },
-      onSuccess: (ctx) => {
-        router.push("/private");
+      {
+        onRequest: (ctx) => {
+          console.log("Signup request started", ctx);
+        },
+        onSuccess: (ctx) => {
+          router.push("/private");
+        },
+        onError: (ctx) => {
+          alert(ctx.error.message);
+        },
       },
-      onError: (ctx) => {
-        alert(ctx.error.message);
-      }
-    });
-
+    );
   }
 
   return (
@@ -120,8 +122,15 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
               <Field>
                 <Button type="submit">Create Account</Button>
 
-                <Button variant="outline" type="button">
-                  Sign up with Google
+                <Button
+                  variant="outline"
+                  type="button"
+                  onClick={() =>
+                    authClient.signIn.social({ provider: "github" })
+                  }
+                >
+                  <Github className="mr-2" />
+                  Sign up with Github
                 </Button>
 
                 <FieldDescription className="px-6 text-center">

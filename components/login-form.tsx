@@ -1,39 +1,50 @@
-"use client"
-
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import Link from "next/link"
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
+"use client";
+import { Github } from "lucide-react";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "@/components/ui/card";
 import {
   Field,
   FieldDescription,
   FieldGroup,
   FieldLabel,
-} from "@/components/ui/field"
-import { Input } from "@/components/ui/input"
-
+} from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import { authClient } from "@/app/lib/auth-client";
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
-  const router = useRouter()
+  const router = useRouter();
 
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [isLoading, setIsLoading] = useState(false)
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault()
-    setIsLoading(true)
-    // late we call api
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setIsLoading(true);
+    await authClient.signIn.email(
+      { email, password, callbackURL: "/private" },
+      {
+        onSuccess: () => {
+          router.push("/private");
+        },
+        onError: (ctx) => {
+          alert(ctx.error.message);
+          setIsLoading(false); // re-enable button on error
+        },
+      },
+    );
   }
 
   return (
@@ -85,8 +96,15 @@ export function LoginForm({
                   {isLoading ? "Logging in..." : "Login"}
                 </Button>
 
-                <Button variant="outline" type="button">
-                  Login with Google
+                <Button
+                  variant="outline"
+                  type="button"
+                  onClick={() =>
+                    authClient.signIn.social({ provider: "github" })
+                  }
+                >
+                  <Github className="w-4 h-4 mr-2" />
+                  Login with Github
                 </Button>
 
                 <FieldDescription className="text-center">
@@ -99,5 +117,5 @@ export function LoginForm({
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }
