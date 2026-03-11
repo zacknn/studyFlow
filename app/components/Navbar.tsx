@@ -1,55 +1,68 @@
-"use client"
-import Link from "next/link"
-import { BookOpen, Moon, Sun, Menu, X } from "lucide-react"
-import { useTheme } from "next-themes"
-import { useEffect, useState } from "react"
-import { authClient } from "@/app/lib/auth-client"
-import { useRouter } from "next/navigation"
+"use client";
+import Link from "next/link";
+import { BookOpen, Moon, Sun, Menu, X } from "lucide-react";
+import { useTheme } from "next-themes";
+import { useEffect, useState } from "react";
+import { authClient } from "@/app/lib/auth-client";
+import { useRouter } from "next/navigation";
 export default function Navbar() {
-  const { theme, setTheme } = useTheme()
-  const [mounted, setMounted] = useState(false)
-  const [menuOpen, setMenuOpen] = useState(false)
-  const { data: session } = authClient.useSession()  
+  const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const { data: session } = authClient.useSession();
 
   useEffect(() => {
-    setMounted(true)
-  }, [])
+    setMounted(true);
+  }, []);
 
-  const router = useRouter()
+  const router = useRouter();
   return (
     <nav className="fixed top-0 w-full z-50 bg-white/80 dark:bg-slate-950/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 transition-colors">
       <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-
         {/* Logo */}
         <div className="flex items-center gap-2">
           <div className="bg-rose-500 p-1.5 rounded-lg">
             <BookOpen className="text-white w-5 h-5" />
           </div>
-          <span className="text-lg font-semibold tracking-tight">StudyFlow</span>
+          <span className="text-lg font-semibold tracking-tight">
+            StudyFlow
+          </span>
         </div>
 
         {/* Desktop links */}
         <div className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600 dark:text-slate-400">
-          <Link href="/dashboard/browse-note" className="hover:text-slate-900 dark:hover:text-white transition-colors">
+          <Link
+            href="/dashboard/browse-note"
+            className="hover:text-slate-900 dark:hover:text-white transition-colors"
+          >
             Browse Notes
           </Link>
-          <Link href="#" className="hover:text-slate-900 dark:hover:text-white transition-colors">
+          <Link
+            href="#"
+            className="hover:text-slate-900 dark:hover:text-white transition-colors"
+          >
             AI Tutor
           </Link>
-          <Link href="#" className="hover:text-slate-900 dark:hover:text-white transition-colors">
+          <Link
+            href="#"
+            className="hover:text-slate-900 dark:hover:text-white transition-colors"
+          >
             Community
           </Link>
         </div>
 
         {/* Right side */}
         <div className="flex items-center gap-4">
-
           {/* Theme toggle */}
           <button
             onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
             className="p-2 text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white transition-colors rounded-full hover:bg-slate-100 dark:hover:bg-slate-800"
           >
-            {mounted && theme === "dark" ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
+            {mounted && theme === "dark" ? (
+              <Moon className="w-5 h-5" />
+            ) : (
+              <Sun className="w-5 h-5" />
+            )}
           </button>
 
           {/* Auth buttons — changes based on session */}
@@ -82,7 +95,11 @@ export default function Navbar() {
                 </div>
               </div>
               <button
-                onClick={() => authClient.signOut({ fetchOptions: { onSuccess: () => router.push("/") }})}
+                onClick={() =>
+                  authClient.signOut({
+                    fetchOptions: { onSuccess: () => router.push("/") },
+                  })
+                }
                 className="hidden sm:block text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
               >
                 Sign out
@@ -114,7 +131,11 @@ export default function Navbar() {
             className="md:hidden p-2"
             onClick={() => setMenuOpen(!menuOpen)}
           >
-            {menuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            {menuOpen ? (
+              <X className="w-5 h-5" />
+            ) : (
+              <Menu className="w-5 h-5" />
+            )}
           </button>
         </div>
       </div>
@@ -122,22 +143,37 @@ export default function Navbar() {
       {/* Mobile menu */}
       {menuOpen && (
         <div className="md:hidden flex flex-col gap-4 px-6 py-4 border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950">
-          <Link href="/dashboard/browse-note" onClick={() => setMenuOpen(false)}>Browse Notes</Link>
-          <Link href="#" onClick={() => setMenuOpen(false)}>AI Tutor</Link>
-          <Link href="#" onClick={() => setMenuOpen(false)}>Community</Link>
+          <Link
+            href="/dashboard/browse-note"
+            onClick={() => setMenuOpen(false)}
+          >
+            Browse Notes
+          </Link>
+          <Link href="#" onClick={() => setMenuOpen(false)}>
+            AI Tutor
+          </Link>
+          <Link href="#" onClick={() => setMenuOpen(false)}>
+            Community
+          </Link>
           {session ? (
             <>
-              <span className="text-sm text-slate-500">{session.user.name}</span>
+              <span className="text-sm text-slate-500">
+                {session.user.name}
+              </span>
               <button onClick={() => authClient.signOut()}>Sign out</button>
             </>
           ) : (
             <>
-              <Link href="/login" onClick={() => setMenuOpen(false)}>Sign in</Link>
-              <Link href="/signup" onClick={() => setMenuOpen(false)}>Get Started</Link>
+              <Link href="/login" onClick={() => setMenuOpen(false)}>
+                Sign in
+              </Link>
+              <Link href="/signup" onClick={() => setMenuOpen(false)}>
+                Get Started
+              </Link>
             </>
           )}
         </div>
       )}
     </nav>
-  )
+  );
 }

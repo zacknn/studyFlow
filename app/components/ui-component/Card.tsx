@@ -1,101 +1,115 @@
-import React from 'react'
-import { formatDistanceToNow } from 'date-fns'
-import { Eye , Heart } from "lucide-react";
-import Post from '@/types';
+import Link from "next/link"
+import { Eye, Heart, FileText, Link as LinkIcon, Tag } from "lucide-react"
+import type { Post } from "@/app/schemas/posts.schemas"
+
 interface CardProps {
   post: Post
   onClick?: (id: string) => void
 }
 
-function Card({ post, onClick }: CardProps) {
-  const typeColor = {
-    tutorial: 'bg-blue-100 text-blue-800',
-    reference: 'bg-purple-100 text-purple-800',
-  }
-
-  const displayType = (post.type as keyof typeof typeColor) || 'tutorial'
-
+export default function Card({ post, onClick }: CardProps) {
   return (
-    <div
+    <Link
+      href={`/dashboard/post/${post.id}`}
       onClick={() => onClick?.(post.id)}
-      className="h-full bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 p-5 flex flex-col cursor-pointer border border-gray-200 dark:bg-slate-800 dark:border-slate-700"
+      className="group block rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-rose-300 dark:hover:border-rose-700 hover:shadow-lg transition-all duration-200 overflow-hidden"
     >
-      {/* Header with type badge */}
-      <div className="flex items-start justify-between mb-3">
-        <h3 className="text-lg font-bold text-gray-900 flex-1 line-clamp-2 dark:text-white">
-          {post.title}
-        </h3>
-        {post.type && (
-          <span
-            className={`ml-2 px-2 py-1 rounded text-xs font-semibold whitespace-nowrap ${
-              typeColor[displayType]
-            }`}
-          >
-            {post.type}
-          </span>
-        )}
-      </div>
+      <div className="p-5 flex flex-col gap-3">
 
-      {/* Description */}
-      {post.description && (
-        <p className="text-sm text-gray-600 mb-3 line-clamp-2 dark:text-white">
-          {post.description}
-        </p>
-      )}
-
-      {/* Tags */}
-      {post.tags && post.tags.length > 0 && (
-        <div className="flex flex-wrap gap-2 mb-3 dark:text-white">
-          {post.tags.slice(0, 3).map((tag) => (
-            <span
-              key={tag}
-              className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs dark:bg-slate-700 dark:text-slate-200"
-            >
-              #{tag}
+        {/* Top row — type badge + visibility */}
+        <div className="flex items-center justify-between">
+          {post.type ? (
+            <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${
+              post.type === "tutorial"
+                ? "bg-rose-100 text-rose-600 dark:bg-rose-900/30 dark:text-rose-400"
+                : "bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400"
+            }`}>
+              {post.type}
             </span>
-          ))}
-          {post.tags.length > 3 && (
-            <span className="px-2 py-1 bg-gray-100 text-gray-600 text-xs">
-              +{post.tags.length - 3}
-            </span>
+          ) : (
+            <span /> // empty to keep justify-between working
           )}
-        </div>
-      )}
 
-      {/* Author and Metadata */}
-      <div className="flex items-center gap-2 mb-3 text-xs text-gray-500">
-        <div className="flex-1">
-          <p className="font-medium text-gray-700">
-            {post.author?.name || 'Anonymous'}
+          <span className={`text-xs px-2 py-1 rounded-full ${
+            post.isPublic
+              ? "bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400"
+              : "bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400"
+          }`}>
+            {post.isPublic ? "Public" : "Private"}
+          </span>
+        </div>
+
+        {/* Title */}
+        <h2 className="text-base font-semibold text-slate-900 dark:text-white group-hover:text-rose-500 dark:group-hover:text-rose-400 transition-colors line-clamp-2">
+          {post.title}
+        </h2>
+
+        {/* Description */}
+        {post.description && (
+          <p className="text-sm text-slate-500 dark:text-slate-400 line-clamp-2">
+            {post.description}
           </p>
-        </div>
-        {!post.isPublic && (
-          <span className="text-xs px-2 py-1 bg-yellow-100 text-yellow-800 rounded">
-            Private
-          </span>
         )}
-      </div>
 
-      {/* Footer with stats and date */}
-      <div className="flex items-center justify-between text-xs text-gray-500 pt-3 border-t border-gray-100 mt-auto">
-        <div className="flex gap-4">
-          <span className="flex items-center gap-1">
-            <Eye className="w-3 h-3" />
-            {post.views}
-          </span>
-          <span className="flex items-center gap-1">
-            <Heart className="w-3 h-3" />
-            {post.likes}
-          </span>
+        {/* Tags */}
+        {post.tags.length > 0 && (
+          <div className="flex flex-wrap gap-1.5">
+            {post.tags.slice(0, 3).map((tag) => (
+              <span
+                key={tag}
+                className="flex items-center gap-1 text-xs text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-full"
+              >
+                <Tag className="w-3 h-3" />
+                {tag}
+              </span>
+            ))}
+            {post.tags.length > 3 && (
+              <span className="text-xs text-slate-400 px-2 py-0.5">
+                +{post.tags.length - 3} more
+              </span>
+            )}
+          </div>
+        )}
+
+        {/* Divider */}
+        <div className="border-t border-slate-100 dark:border-slate-800" />
+
+        {/* Bottom row — stats */}
+        <div className="flex items-center justify-between text-xs text-slate-400 dark:text-slate-500">
+          <div className="flex items-center gap-3">
+            <span className="flex items-center gap-1">
+              <Eye className="w-3.5 h-3.5" />
+              {post.views}
+            </span>
+            <span className="flex items-center gap-1">
+              <Heart className="w-3.5 h-3.5" />
+              {post.likes}
+            </span>
+          </div>
+
+          <div className="flex items-center gap-3">
+            {post.files.length > 0 && (
+              <span className="flex items-center gap-1">
+                <FileText className="w-3.5 h-3.5" />
+                {post.files.length}
+              </span>
+            )}
+            {post.links.length > 0 && (
+              <span className="flex items-center gap-1">
+                <LinkIcon className="w-3.5 h-3.5" />
+                {post.links.length}
+              </span>
+            )}
+            <span className="text-slate-300 dark:text-slate-600">
+              {new Date(post.createdAt).toLocaleDateString("en-US", {
+                month: "short",
+                day: "numeric",
+              })}
+            </span>
+          </div>
         </div>
-        <span title={post.createdAt.toString()}>
-          {formatDistanceToNow(new Date(post.createdAt), {
-            addSuffix: true,
-          })}
-        </span>
+
       </div>
-    </div>
+    </Link>
   )
 }
-
-export default Card

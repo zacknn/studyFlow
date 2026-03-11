@@ -1,3 +1,4 @@
+// /router/index.ts
 import { implement } from "@orpc/server";
 import { contract } from "../contract";
 import { CreatePost, DeletePost, GetPostById, ListPosts, UpdatePost } from "./post";

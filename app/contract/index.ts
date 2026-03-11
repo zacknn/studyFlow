@@ -1,3 +1,4 @@
+// /contract/index.ts
 import { CreatePostContract, DeletePostContract, GetPostByIdContract, ListPostsContract, UpdatePostContract } from "./post.contract";
 
 export const contract = {
