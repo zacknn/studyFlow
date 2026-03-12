@@ -1,27 +1,46 @@
-import { OpenAPIHandler } from '@orpc/openapi/fetch' // or '@orpc/server/node'
+import { OpenAPIHandler } from '@orpc/openapi/fetch'
+import { RPCHandler } from '@orpc/server/fetch'        
 import { CORSPlugin } from '@orpc/server/plugins'
 import { onError } from '@orpc/server'
 import { router } from '@/app/router'
 
-const handler = new OpenAPIHandler(router, {
+const openAPIHandler = new OpenAPIHandler(router, {
   plugins: [new CORSPlugin()],
   interceptors: [
-    onError((error) => {
-      console.error(error)
-    }),
+    onError((error) => console.error(error)),
+  ],
+})
+
+const rpcHandler = new RPCHandler(router, {           
+  plugins: [new CORSPlugin()],
+  interceptors: [
+    onError((error) => console.error(error)),
   ],
 })
 
 async function handleRequest(request: Request) {
-  const { matched, response } = await handler.handle(request, {
+  
+  const rpcResult = await rpcHandler.handle(request, {
     prefix: '/api',
     context: {
-      headers: request.headers,  
+      headers: request.headers,
     },
   })
 
-  if (matched) {
-    return response
+  if (rpcResult.matched) {
+    return rpcResult.response
+  }
+
+ 
+  const openAPIResult = await openAPIHandler.handle(request, {
+    prefix: '/api',
+    context: {
+      headers: request.headers,
+    },
+  })
+
+  if (openAPIResult.matched) {
+    return openAPIResult.response
   }
 
   return new Response('Not Found', { status: 404 })
