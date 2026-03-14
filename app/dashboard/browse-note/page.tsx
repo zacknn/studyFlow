@@ -1,15 +1,11 @@
-// app/dashboard/browse-note/page.tsx
 "use client"
-import React from "react"
 import SearchBar from "@/app/components/ui-component/SearchBar"
 import Filters from "@/app/components/ui-component/Fillters"
-import Card from "@/app/components/ui-component/Card"
+import { Button } from "@/components/ui/button"
+import { Suspense } from "react"
+import PostsGrid from "@/app/components/ui-component/PostsGrid"
 import PostsLoading from "@/app/components/ui-loading/PostLoading"
-import PostsError from "@/app/components/ui-loading/PostsError"
-import { useListPosts } from "@/app/lib/queries/post.queries"
-
 export default function BrowseNotesPage() {
-  const { data, isLoading, isError, error, refetch } = useListPosts({ isPublic: true })
 
   return (
     <div className="p-6">
@@ -31,37 +27,12 @@ export default function BrowseNotesPage() {
         </div>
       </div>
 
-      {/* Results count */}
-      {data && (
-        <div className="mb-8 text-center text-gray-600 dark:text-gray-400">
-          <p>Showing {data.data.length} of {data.total} posts</p>
-        </div>
-      )}
-
-      {/* States */}
-      {isLoading && <PostsLoading />}
-
-      {isError && (
-        <PostsError
-          message={error?.message}
-          onRetry={() => refetch()}
-        />
-      )}
-
-      {/* Cards Grid */}
-      {data && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {data.data.length === 0 ? (
-            <p className="col-span-3 text-center text-slate-500 py-16">
-              No posts found.
-            </p>
-          ) : (
-            data.data.map((post) => (
-              <Card key={post.id} post={post} />
-            ))
-          )}
-        </div>
-      )}
+      {/* button for adding new notes */}
+      <Button className="mb-8">Add Note</Button>
+      {/* Post Grid */}
+      <Suspense fallback={<PostsLoading />}>
+        <PostsGrid />
+      </Suspense>
     </div>
   )
 }
