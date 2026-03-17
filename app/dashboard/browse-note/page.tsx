@@ -1,12 +1,11 @@
-"use client"
-import SearchBar from "@/app/components/ui-component/SearchBar"
-import Filters from "@/app/components/ui-component/Fillters"
-import { Button } from "@/components/ui/button"
-import { Suspense } from "react"
-import PostsGrid from "@/app/components/ui-component/PostsGrid"
-import PostsLoading from "@/app/components/ui-loading/PostLoading"
+import SearchBar from "@/app/components/ui-component/SearchBar";
+import Filters from "@/app/components/ui-component/Fillters";
+import { Button } from "@/components/ui/button";
+import { Suspense } from "react";
+import PostsGrid from "@/app/components/ui-component/PostsGrid";
+import PostsLoading from "@/app/components/ui-loading/PostLoading";
+import Link from "next/link";
 export default function BrowseNotesPage() {
-
   return (
     <div className="p-6">
       {/* Header */}
@@ -28,11 +27,14 @@ export default function BrowseNotesPage() {
       </div>
 
       {/* button for adding new notes */}
-      <Button className="mb-8">Add Note</Button>
+      <Link href={"/dashboard/create-post"}>
+        <Button className="mb-8">Add Note</Button>
+      </Link>
+
       {/* Post Grid */}
       <Suspense fallback={<PostsLoading />}>
         <PostsGrid />
       </Suspense>
     </div>
-  )
+  );
 }
