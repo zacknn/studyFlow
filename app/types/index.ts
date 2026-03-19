@@ -4,9 +4,11 @@ export interface LinkEntry{
     label : string ,
 }
 
-export interface FileEntry{
-    id: string,
-    file: File,
-    name: string,
-    size: string,
+export interface FileEntry {
+  id: string,
+  url: string,        
+  name: string,
+  sizeFormatted: string,
+  sizeBytes: number,       
+  mimeType: string,
 }

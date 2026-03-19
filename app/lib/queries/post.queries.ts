@@ -59,3 +59,29 @@ export function useDeletePost() {
     })
   )
 }
+
+export function useCreateFile() {
+  const queryClient = useQueryClient()
+  return useMutation(
+    orpc.File.create.mutationOptions({
+      onSuccess: (_, variables) => {
+        queryClient.invalidateQueries({
+          queryKey: orpc.Post.getById.key({ input: { id: variables.postId } })
+        })
+      }
+    })
+  )
+}
+
+export function useCreateLink() {
+  const queryClient = useQueryClient()
+  return useMutation(
+    orpc.Link.create.mutationOptions({
+      onSuccess: (_, variables) => {
+        queryClient.invalidateQueries({
+          queryKey: orpc.Post.getById.key({ input: { id: variables.postId } })
+        })
+      }
+    })
+  )
+}
