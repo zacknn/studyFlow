@@ -155,3 +155,45 @@ export const ListPosts = os.Post.list.handler(async ({ input }) => {
 
   return { data: posts, total, page, limit };
 });
+
+export const IncrementLikes = os.Post.like.handler(
+  async ({ input, errors }) => {
+    const post = await prisma.post.findUnique({
+      where: { id: input.id },
+    });
+
+    if (!post) {
+      throw errors.NOT_FOUND({
+        data: { resourceType: "Post", resourceId: input.id },
+      });
+    }
+
+    const updated = await prisma.post.update({
+      where: { id: input.id },
+      data: { likes: { increment: 1 } },
+    });
+
+    return { id: updated.id };
+  },
+);
+
+export const IncrementViews = os.Post.view.handler(
+  async ({ input, errors }) => {
+    const post = await prisma.post.findUnique({
+      where: { id: input.id },
+    });
+
+    if (!post) {
+      throw errors.NOT_FOUND({
+        data: { resourceType: "Post", resourceId: input.id },
+      });
+    }
+
+    const updated = await prisma.post.update({
+      where: { id: input.id },
+      data: { views: { increment: 1 } },
+    });
+
+    return { id: updated.id };
+  },
+);

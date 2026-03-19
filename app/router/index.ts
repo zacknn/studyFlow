@@ -6,6 +6,8 @@ import {
   GetPostById,
   ListPosts,
   UpdatePost,
+  IncrementLikes,
+  IncrementViews,
 } from "./post";
 import { CreateFile , DeleteFile } from "./file";
 import { CreateLink , UpdateLink , DeleteLink } from "./link";
@@ -18,6 +20,8 @@ export const router = os.router({
     update: UpdatePost,
     getById: GetPostById,
     list: ListPosts,
+    like: IncrementLikes,
+    view: IncrementViews,
   },
   File: {
     create: CreateFile,

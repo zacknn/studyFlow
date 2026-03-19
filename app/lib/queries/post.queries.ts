@@ -85,3 +85,30 @@ export function useCreateLink() {
     })
   )
 }
+
+export function useIncrementLikes() {
+  const queryClient = useQueryClient()
+
+  return useMutation(
+    orpc.Post.like.mutationOptions({
+      onSuccess: (_, variables) => {
+        // update the single post cache
+        queryClient.invalidateQueries({
+          queryKey: orpc.Post.getById.key({ input: { id: variables.id } })
+        })
+        // update the list cache too (likes show on cards)
+        queryClient.invalidateQueries({
+          queryKey: orpc.Post.list.key()
+        })
+      }
+    })
+  )
+}
+
+export function useIncrementViews() {
+  return useMutation(
+    orpc.Post.view.mutationOptions()
+    // no cache invalidation needed —
+    // views are just a counter, no need to refetch the whole list
+  )
+}

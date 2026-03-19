@@ -4,6 +4,8 @@ import {
   GetPostByIdContract,
   ListPostsContract,
   UpdatePostContract,
+  IncrementLikesContract,
+  IncrementViewContract
 } from "./post.contract";
 import { CreateFileContract, DeleteFileContract } from "./file.contract";
 import {
@@ -21,6 +23,8 @@ export const contract = {
     delete: DeletePostContract,
     getById: GetPostByIdContract,
     list: ListPostsContract,
+    like: IncrementLikesContract,
+    view: IncrementViewContract,
   },
   File: {
     create: CreateFileContract,

@@ -6,6 +6,9 @@ import {
   PaginatedPostsSchema,
   PostOutputSchema,
   UpdatePostInputSchema,
+  IncrementPostLikesInputSchema,
+  IncrementPostViewsInputSchema,
+  PostMutationOutputSchema,
 } from "../schemas/posts.schemas";
 import { base } from "../lib/base";
 
@@ -65,3 +68,23 @@ export const ListPostsContract = base
   })
   .input(ListPostsInputSchema)
   .output(PaginatedPostsSchema);
+
+export const IncrementLikesContract = base
+  .route({
+    method:"GET",
+    path: "/posts/{id}/like",
+    summary: "like a post",
+    tags: ["posts"]
+  })
+  .input(IncrementPostLikesInputSchema)
+  .output(PostMutationOutputSchema)
+
+export const IncrementViewContract = base
+  .route({
+    method:"GET",
+    path: "/posts/{id}/view",
+    summary: "view a post",
+    tags: ["posts"],
+  })
+  .input(IncrementPostViewsInputSchema)
+  .output(PostMutationOutputSchema)

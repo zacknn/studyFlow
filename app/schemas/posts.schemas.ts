@@ -149,3 +149,16 @@ export const PaginatedPostsSchema = z.object({
 });
 
 export type PaginatedPosts = z.infer<typeof PaginatedPostsSchema>;
+
+
+export const IncrementPostLikesInputSchema = z.object({
+  id: z.string(),
+})
+
+export const IncrementPostViewsInputSchema = z.object({
+  id: z.string(),
+})
+
+export const PostMutationOutputSchema = z.object({
+  id: z.string(),
+})
