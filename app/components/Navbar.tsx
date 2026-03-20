@@ -20,14 +20,16 @@ export default function Navbar() {
     <nav className="fixed top-0 w-full z-50 bg-white/80 dark:bg-slate-950/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 transition-colors">
       <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
         {/* Logo */}
-        <div className="flex items-center gap-2">
-          <div className="bg-rose-500 p-1.5 rounded-lg">
-            <BookOpen className="text-white w-5 h-5" />
+        <Link href={"/"}>
+          <div className="flex items-center gap-2">
+            <div className="bg-rose-500 p-1.5 rounded-lg">
+              <BookOpen className="text-white w-5 h-5" />
+            </div>
+            <span className="text-lg font-semibold tracking-tight">
+              StudyFlow
+            </span>
           </div>
-          <span className="text-lg font-semibold tracking-tight">
-            StudyFlow
-          </span>
-        </div>
+        </Link>
 
         {/* Desktop links */}
         <div className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600 dark:text-slate-400">
