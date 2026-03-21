@@ -9,6 +9,7 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@ai-sdk/google": "^3.0.52",
     "@orpc/client": "^1.13.5",
     "@orpc/contract": "^1.13.5",
     "@orpc/openapi": "^1.13.5",
@@ -22,6 +23,7 @@
     "@scalar/nextjs-api-reference": "^0.9.24",
     "@tanstack/react-query": "^5.90.21",
     "@uploadthing/react": "^7.3.3",
+    "ai": "^6.0.134",
     "better-auth": "^1.4.10",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
