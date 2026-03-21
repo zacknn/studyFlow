@@ -11,7 +11,7 @@ export async function POST(req: Request) {
     return Response.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const { messages, postId } = await req.json();
+  const { messages, postId, chatId } = await req.json();
 
   // if the post id provided , get post context
   let systemPrompt = `You are a helpful AI study assistant. 
@@ -33,20 +33,52 @@ export async function POST(req: Request) {
     }
   }
 
-  // stream the response
   const result = streamText({
     model: google("gemini-2.0-flash"),
     system: systemPrompt,
-    messages, // full conversation history
+    messages,
     onFinish: async ({ text }) => {
-      // save to AIHistory after response completes
-      await prisma.aIHistory.create({
-        data: {
-          inputText: messages[messages.length - 1].content,
-          responseText: text,
-          userId: session.user.id,
-        },
-      });
+      if (chatId) {
+        // existing chat — just add the new messages
+        await prisma.aIMessage.createMany({
+          data: [
+            {
+              chatId,
+              role: "user",
+              content: messages[messages.length - 1].content,
+            },
+            {
+              chatId,
+              role: "assistant",
+              content: text,
+            },
+          ],
+        });
+      } else {
+        // new chat — create session + first messages together
+        await prisma.aIHistory.create({
+          data: {
+            userId: session.user.id,
+            postId: postId ?? null,
+            title:
+              typeof messages[0].content === "string"
+                ? messages[0].content.slice(0, 50)
+                : "New Chat",
+            messages: {
+              create: [
+                {
+                  role: "user",
+                  content: messages[messages.length - 1].content,
+                },
+                {
+                  role: "assistant",
+                  content: text,
+                },
+              ],
+            },
+          },
+        });
+      }
     },
   });
 

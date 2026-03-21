@@ -107,6 +107,7 @@ model Post {
   author      User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
   files       File[]
   links       Link[]
+  aiHistories AIHistory[]
   // Analytics
   views       Int      @default(0)
   likes       Int      @default(0)
@@ -137,10 +138,27 @@ model Link {
 }
 
 model AIHistory {
-  id           String   @id @default(cuid())
-  inputText    String   @db.Text // Use Text for long AI prompts
-  responseText String   @db.Text // Use Text for long AI answers
-  userId       String
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  createdAt    DateTime @default(now())
+  id        String        @id @default(cuid())
+  title     String?                            // "Chat about Math notes"
+  userId    String
+  postId    String?                            // optional link to a post
+  messages  AIMessage[]                        // all messages in this chat
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  user User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post Post? @relation(fields: [postId], references: [id], onDelete: SetNull)
+
+  @@map("ai_history")
+}
+
+model AIMessage {
+  id        String    @id @default(cuid())
+  role      String    // "user" | "assistant"
+  content   String    @db.Text
+  chatId    String
+  chat      AIHistory @relation(fields: [chatId], references: [id], onDelete: Cascade)
+  createdAt DateTime  @default(now())
+
+  @@map("ai_message")
 }
