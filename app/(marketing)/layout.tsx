@@ -1,6 +1,7 @@
-import Navbar from "../components/Navbar"
+import Navbar from "@/app/components/Navbar"
+import Footer from "@/app/components/Footer"
 
-export default function DashboardLayout({
+export default function MarketingLayout({
   children,
 }: {
   children: React.ReactNode
@@ -8,10 +9,10 @@ export default function DashboardLayout({
   return (
     <>
       <Navbar />
-      {/* pt-16 accounts for fixed navbar, nothing else */}
       <main className="pt-16">
         {children}
       </main>
+      <Footer />
     </>
   )
 }

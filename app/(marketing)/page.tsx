@@ -1,0 +1,15 @@
+import Hero from "../components/Hero";
+import ServicesGrid from "../components/ServicesGrid";
+import InteractiveDemo from "../components/InteractiveDemo";
+import AuthCTA from "../components/AuthCTA";
+
+export default function DashboardPage() {
+  return (
+    <div className="max-w-7xl mx-auto px-6 py-8">
+      <Hero />
+      <ServicesGrid />
+      <InteractiveDemo />
+      <AuthCTA />
+    </div>
+  );
+}
