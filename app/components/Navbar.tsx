@@ -40,7 +40,7 @@ export default function Navbar() {
             Browse Notes
           </Link>
           <Link
-            href="#"
+            href="/dashboard/ai-tutor"
             className="hover:text-slate-900 dark:hover:text-white transition-colors"
           >
             AI Tutor

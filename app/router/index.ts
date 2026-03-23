@@ -11,6 +11,8 @@ import {
 } from "./post";
 import { CreateFile , DeleteFile } from "./file";
 import { CreateLink , UpdateLink , DeleteLink } from "./link";
+import { ListChats , DeleteChat , GetChat } from "./ai";
+
 const os = implement(contract).$context<{ headers: Headers }>();
 
 export const router = os.router({
@@ -31,5 +33,10 @@ export const router = os.router({
     create: CreateLink,
     delete: DeleteLink,
     update: UpdateLink,
+  },
+  AI: {
+    listChats: ListChats,
+    getChat: GetChat,
+    deleteChat: DeleteChat,
   }
 });

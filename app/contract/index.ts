@@ -5,7 +5,7 @@ import {
   ListPostsContract,
   UpdatePostContract,
   IncrementLikesContract,
-  IncrementViewContract
+  IncrementViewContract,
 } from "./post.contract";
 import { CreateFileContract, DeleteFileContract } from "./file.contract";
 import {
@@ -13,8 +13,11 @@ import {
   DeleteLinkContract,
   UpdateLinkContract,
 } from "./link.contract";
-
-
+import {
+  ListChatsContract,
+  GetChatContract,
+  DeleteChatContract,
+} from "./ai.contract";
 
 export const contract = {
   Post: {
@@ -31,8 +34,13 @@ export const contract = {
     delete: DeleteFileContract,
   },
   Link: {
-    create : CreateLinkContract,
+    create: CreateLinkContract,
     update: UpdateLinkContract,
     delete: DeleteLinkContract,
+  },
+  AI: {
+    listChats: ListChatsContract,
+    getChat : GetChatContract,
+    deleteChat: DeleteChatContract,
   }
 };
