@@ -1,9 +1,9 @@
-import React from 'react'
+import { AIChatContainer } from "@/app/components/ui-component/ai/AIChatContainer"
 
-function page() {
+export default function AITutorPage() {
   return (
-    <div>page</div>
+    <div className="h-[calc(100vh-4rem)] bg-slate-950 overflow-hidden">
+      <AIChatContainer />
+    </div>
   )
 }
-
-export default page
