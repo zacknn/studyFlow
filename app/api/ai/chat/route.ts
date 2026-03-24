@@ -4,6 +4,7 @@ import { auth } from "@/app/lib/auth";
 import { headers } from "next/headers";
 import prisma from "@/app/lib/prisma";
 
+
 export async function POST(req: Request) {
   // check auth
   const session = await auth.api.getSession({ headers: await headers() });
@@ -11,9 +12,19 @@ export async function POST(req: Request) {
     return Response.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const { messages, postId, chatId } = await req.json();
+  const body = await req.json();
+  const { messages, postId, chatId } = body;
 
-  // if the post id provided , get post context
+  const formattedMessages = messages
+    .map((m: any) => ({
+      role: m.role,
+      content: m.parts
+        ? m.parts.map((p: any) => p.text ?? "").join("")
+        : (m.content ?? ""),
+    }))
+    .filter((m: any) => m.content);
+
+  // build system prompt
   let systemPrompt = `You are a helpful AI study assistant. 
   Help students understand concepts clearly and simply.
   Keep responses concise and educational.`;
@@ -21,66 +32,59 @@ export async function POST(req: Request) {
   if (postId) {
     const post = await prisma.post.findUnique({
       where: { id: postId },
-      include: { files: true, links: true },
-    });
+      include: { files: true }
+    })
     if (post) {
-      systemPrompt = `You are a helpful AI study assistant helping a student with "${post.title}".
-      ${post.description ? `The post is about: ${post.description}` : ""}
-      ${post.tags.length > 0 ? `Topics covered: ${post.tags.join(", ")}` : ""}
-      ${post.files.length > 0 ? `Available files: ${post.files.map((f) => f.name).join(", ")}` : ""}
-      
-      Help the student understand the material. Be clear, concise, and encouraging.`;
+      systemPrompt = `You are a helpful AI study assistant helping with "${post.title}".
+      ${post.description ? `About: ${post.description}` : ""}
+      ${post.tags.length > 0 ? `Topics: ${post.tags.join(", ")}` : ""}
+      Be clear, concise and encouraging.`
     }
   }
+
+  const lastUserMessage = formattedMessages
+    .filter((m: any) => m.role === "user")
+    .at(-1)?.content ?? ""
 
   const result = streamText({
     model: google("gemini-2.0-flash"),
     system: systemPrompt,
-    messages,
+    messages: formattedMessages,
     onFinish: async ({ text }) => {
-      if (chatId) {
-        // existing chat — just add the new messages
-        await prisma.aIMessage.createMany({
-          data: [
-            {
-              chatId,
-              role: "user",
-              content: messages[messages.length - 1].content,
-            },
-            {
-              chatId,
-              role: "assistant",
-              content: text,
-            },
-          ],
-        });
-      } else {
-        // new chat — create session + first messages together
-        await prisma.aIHistory.create({
-          data: {
-            userId: session.user.id,
-            postId: postId ?? null,
-            title:
-              typeof messages[0].content === "string"
-                ? messages[0].content.slice(0, 50)
-                : "New Chat",
-            messages: {
-              create: [
-                {
-                  role: "user",
-                  content: messages[messages.length - 1].content,
-                },
-                {
-                  role: "assistant",
-                  content: text,
-                },
-              ],
-            },
-          },
-        });
+      try {
+        let savedChatId = chatId
+
+        if (chatId) {
+          // existing chat — just add new messages
+          await prisma.aIMessage.createMany({
+            data: [
+              { chatId, role: "user", content: lastUserMessage },
+              { chatId, role: "assistant", content: text },
+            ]
+          })
+        } else {
+          // new chat — create session + messages
+          const newChat = await prisma.aIHistory.create({
+            data: {
+              userId: session.user.id,
+              postId: postId ?? null,
+              title: lastUserMessage.slice(0, 50),
+              messages: {
+                create: [
+                  { role: "user", content: lastUserMessage },
+                  { role: "assistant", content: text },
+                ]
+              }
+            }
+          })
+          savedChatId = newChat.id
+        }
+
+      } catch (err) {
+        console.error("Failed to save chat:", err)
       }
-    },
-  });
+    }
+  })
 
   return result.toTextStreamResponse();
 }

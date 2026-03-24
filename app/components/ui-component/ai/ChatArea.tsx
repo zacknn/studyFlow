@@ -6,6 +6,7 @@ import { MessageBubble } from "./MessageBubble"
 import { ChatInput } from "./ChatInput"
 import { WelcomeScreen } from "./WelcomeScreen"
 import { useAIChat } from "@/app/lib/hooks/useAIChat"
+import { useGetChat } from "@/app/lib/queries/ai.queries"
 
 interface ChatAreaProps {
   chatId: string | null
@@ -14,22 +15,42 @@ interface ChatAreaProps {
 }
 
 export function ChatArea({ chatId, onChatCreated, postId }: ChatAreaProps) {
-  const { messages, sendMessage, status, setChatId } = useAIChat(postId)
+  const { messages, sendMessage, status, setChatId, setMessages, resetChat } = useAIChat(postId)
+  const { data: existingChat } = useGetChat(chatId)  
   const bottomRef = useRef<HTMLDivElement>(null)
   const isLoading = status === "streaming" || status === "submitted"
 
+  // when user selects existing chat from sidebar → load its messages
   useEffect(() => {
-    setChatId(chatId)
+    if (existingChat && chatId) {
+      setChatId(chatId)
+
+      // convert DB messages to useChat format
+      setMessages(
+        existingChat.messages.map(m => ({
+          id: m.id,
+          role: m.role as "user" | "assistant",
+          parts: [{ type: "text" as const, text: m.content }],
+          content: m.content,
+        }))
+      )
+    }
+  }, [chatId, existingChat])
+
+  // when new chat button clicked
+  useEffect(() => {
+    if (!chatId) {
+      resetChat()
+    }
   }, [chatId])
 
+  // auto scroll
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" })
   }, [messages])
 
   function handleSend(text: string, fileUrl?: string) {
-    const content = fileUrl
-      ? `${text}\n\n[File: ${fileUrl}]`
-      : text
+    const content = fileUrl ? `${text}\n\n[File: ${fileUrl}]` : text
     sendMessage({ text: content })
   }
 
