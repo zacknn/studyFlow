@@ -1,13 +1,20 @@
 import Link from "next/link"
+import Image from "next/image"
 import { Eye, Heart, FileText, Link as LinkIcon, Tag } from "lucide-react"
 import type { Post } from "@/app/schemas/posts.schemas"
 
+interface Author {
+  name?: string | null
+  image?: string | null
+}
+
 interface CardProps {
   post: Post
+  author?: Author
   onClick?: (id: string) => void
 }
 
-export default function Card({ post, onClick }: CardProps) {
+export default function Card({ post, author, onClick }: CardProps) {
   return (
     <Link
       href={`/dashboard/post/${post.id}`}
@@ -27,7 +34,7 @@ export default function Card({ post, onClick }: CardProps) {
               {post.type}
             </span>
           ) : (
-            <span /> // empty to keep justify-between working
+            <span /> 
           )}
 
           <span className={`text-xs px-2 py-1 rounded-full ${
@@ -51,13 +58,37 @@ export default function Card({ post, onClick }: CardProps) {
           </p>
         )}
 
+        {/* Author */}
+        {author && (
+          <div className="flex items-center gap-2">
+            {author.image ? (
+              <Image
+                src={author.image}
+                alt={author.name ?? "Author"}
+                width={24}
+                height={24}
+                className="rounded-full object-cover ring-1 ring-slate-200 dark:ring-slate-700"
+              />
+            ) : (
+              <span className="w-6 h-6 rounded-full bg-rose-100 dark:bg-rose-900/40 text-rose-500 dark:text-rose-400 text-xs font-semibold flex items-center justify-center ring-1 ring-slate-200 dark:ring-slate-700">
+                {author.name?.[0]?.toUpperCase() ?? "?"}
+              </span>
+            )}
+            {author.name && (
+              <span className="text-xs text-slate-500 dark:text-slate-400 truncate">
+                {author.name}
+              </span>
+            )}
+          </div>
+        )}
+
         {/* Tags */}
         {post.tags.length > 0 && (
           <div className="flex flex-wrap gap-1.5">
             {post.tags.slice(0, 3).map((tag) => (
               <span
                 key={tag}
-                className="flex items-center gap-1 text-xs text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-full"
+                className="flex items-center gap-1 text-xs text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30 px-2 py-0.5 rounded-full"
               >
                 <Tag className="w-3 h-3" />
                 {tag}

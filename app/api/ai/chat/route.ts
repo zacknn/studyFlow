@@ -47,7 +47,7 @@ export async function POST(req: Request) {
     .at(-1)?.content ?? ""
 
   const result = streamText({
-    model: google("gemini-2.0-flash"),
+    model: google("gemini-2.5-flash"),
     system: systemPrompt,
     messages: formattedMessages,
     onFinish: async ({ text }) => {
