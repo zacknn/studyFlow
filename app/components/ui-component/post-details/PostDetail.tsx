@@ -10,7 +10,6 @@ import { PostDetailSkeleton } from "../../ui-loading/PostDetailSkeleton"
 export function PostDetail({ id }: { id: string }) {
   const { data: post, isLoading, isError, error, refetch } = useGetPost(id)
   const { mutate: incrementViews } = useIncrementViews()
-
   // increment views once when page loads
   useEffect(() => {
     incrementViews({ id })
