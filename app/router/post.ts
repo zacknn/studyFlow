@@ -131,29 +131,48 @@ export const GetPostById = os.Post.getById
   });
 
 export const ListPosts = os.Post.list.handler(async ({ input }) => {
-  const { page, limit, type, tag, isPublic } = input;
+  const { page = 1, limit = 12, search, type, tag, isPublic } = input;
+  const where: any = {
+    isPublic,
+  };
+
+  if (type) {
+    where.type = type;
+  }
+
+  if (search && search.length > 0) {
+    where.title = {
+      contains: search,
+      mode: "insensitive",
+    };
+  }
+
+  if (tag && tag.length > 0) {
+    where.tags = {
+      has: tag,
+    };
+  }
 
   const [posts, total] = await prisma.$transaction([
     prisma.post.findMany({
-      where: {
-        isPublic,
-        type,
-        tags: tag ? { has: tag } : undefined,
-      },
+      where,
       orderBy: { createdAt: "desc" },
       skip: (page - 1) * limit,
       take: limit,
       include: { files: true, links: true },
     }),
-    prisma.post.count({
-      where: {
-        isPublic,
-        type,
-      },
-    }),
+    prisma.post.count({ where }),
   ]);
 
-  return { data: posts, total, page, limit };
+  const totalPages = Math.ceil(total / limit);
+
+  return {
+    data: posts,
+    total,
+    page,
+    limit,
+    totalPages,
+  };
 });
 
 export const IncrementLikes = os.Post.like.handler(

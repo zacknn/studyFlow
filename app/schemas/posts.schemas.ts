@@ -133,6 +133,7 @@ export const ListPostsInputSchema = z.object({
   authorId: z.string().optional(),
   isPublic: z.coerce.boolean().optional(),
   tag: z.string().optional(),
+  search: z.string().trim().optional(),
 });
 
 export type ListPostsInput = z.infer<typeof ListPostsInputSchema>;
@@ -146,6 +147,7 @@ export const PaginatedPostsSchema = z.object({
   total: z.number().int(),
   page: z.number().int(),
   limit: z.number().int(),
+  totalPages: z.number().int().min(0),
 });
 
 export type PaginatedPosts = z.infer<typeof PaginatedPostsSchema>;

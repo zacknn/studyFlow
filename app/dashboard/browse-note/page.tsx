@@ -20,7 +20,7 @@ export default function BrowseNotesPage() {
             <SearchBar />
           </div>
           <Filters
-            categories={["Math", "Science", "History", "Literature"]}
+            tags={["Math", "Science", "History", "Literature"]}
             className="md:ml-4"
           />
         </div>
