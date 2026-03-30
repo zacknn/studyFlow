@@ -47,6 +47,12 @@ export const LinkSchema = z.object({
    Core Post (DB Shape)
 ========================================================= */
 
+export const AuthorSchema = z.object({
+  id : z.string(),
+  name : z.string().nullable(),
+  image : z.string().nullable(),
+})
+
 export const PostSchema = z.object({
   id: z.string(),
   title: z.string().min(1),
@@ -54,6 +60,7 @@ export const PostSchema = z.object({
   type: PostTypeEnum.optional().nullable(),
   isPublic: z.boolean(),
   authorId: z.string(),
+  author : AuthorSchema, 
   views: z.number().int().nonnegative(),
   likes: z.number().int().nonnegative(),
   tags: z.array(z.string().min(1)),
@@ -62,6 +69,8 @@ export const PostSchema = z.object({
   files: z.array(FileSchema),
   links: z.array(LinkSchema),
 });
+
+
 
 export type Post = z.infer<typeof PostSchema>;
 

@@ -1,20 +1,15 @@
-import Link from "next/link"
-import Image from "next/image"
-import { Eye, Heart, FileText, Link as LinkIcon, Tag } from "lucide-react"
-import type { Post } from "@/app/schemas/posts.schemas"
-
-interface Author {
-  name?: string | null
-  image?: string | null
-}
+import Link from "next/link";
+import Image from "next/image";
+import { Eye, Heart, FileText, Link as LinkIcon, Tag } from "lucide-react";
+import type { Post } from "@/app/schemas/posts.schemas";
+import { AuthorBadge } from "./AuthorBadge";
 
 interface CardProps {
-  post: Post
-  author?: Author
-  onClick?: (id: string) => void
+  post: Post;
+  onClick?: (id: string) => void;
 }
 
-export default function Card({ post, author, onClick }: CardProps) {
+export default function Card({ post, onClick }: CardProps) {
   return (
     <Link
       href={`/dashboard/post/${post.id}`}
@@ -22,26 +17,29 @@ export default function Card({ post, author, onClick }: CardProps) {
       className="group block rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-rose-300 dark:hover:border-rose-700 hover:shadow-lg transition-all duration-200 overflow-hidden"
     >
       <div className="p-5 flex flex-col gap-3">
-
         {/* Top row — type badge + visibility */}
         <div className="flex items-center justify-between">
           {post.type ? (
-            <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${
-              post.type === "tutorial"
-                ? "bg-rose-100 text-rose-600 dark:bg-rose-900/30 dark:text-rose-400"
-                : "bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400"
-            }`}>
+            <span
+              className={`text-xs font-medium px-2.5 py-1 rounded-full ${
+                post.type === "tutorial"
+                  ? "bg-rose-100 text-rose-600 dark:bg-rose-900/30 dark:text-rose-400"
+                  : "bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400"
+              }`}
+            >
               {post.type}
             </span>
           ) : (
-            <span /> 
+            <span />
           )}
 
-          <span className={`text-xs px-2 py-1 rounded-full ${
-            post.isPublic
-              ? "bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400"
-              : "bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400"
-          }`}>
+          <span
+            className={`text-xs px-2 py-1 rounded-full ${
+              post.isPublic
+                ? "bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400"
+                : "bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400"
+            }`}
+          >
             {post.isPublic ? "Public" : "Private"}
           </span>
         </div>
@@ -58,29 +56,8 @@ export default function Card({ post, author, onClick }: CardProps) {
           </p>
         )}
 
-        {/* Author */}
-        {author && (
-          <div className="flex items-center gap-2">
-            {author.image ? (
-              <Image
-                src={author.image}
-                alt={author.name ?? "Author"}
-                width={24}
-                height={24}
-                className="rounded-full object-cover ring-1 ring-slate-200 dark:ring-slate-700"
-              />
-            ) : (
-              <span className="w-6 h-6 rounded-full bg-rose-100 dark:bg-rose-900/40 text-rose-500 dark:text-rose-400 text-xs font-semibold flex items-center justify-center ring-1 ring-slate-200 dark:ring-slate-700">
-                {author.name?.[0]?.toUpperCase() ?? "?"}
-              </span>
-            )}
-            {author.name && (
-              <span className="text-xs text-slate-500 dark:text-slate-400 truncate">
-                {author.name}
-              </span>
-            )}
-          </div>
-        )}
+        {/* Author badge */}
+        <AuthorBadge author={post.author} />
 
         {/* Tags */}
         {post.tags.length > 0 && (
@@ -139,8 +116,7 @@ export default function Card({ post, author, onClick }: CardProps) {
             </span>
           </div>
         </div>
-
       </div>
     </Link>
-  )
+  );
 }

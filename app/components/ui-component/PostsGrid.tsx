@@ -6,7 +6,6 @@ import Card from "./Card";
 import PostsError from "../ui-loading/PostsError";
 import PostsLoading from "../ui-loading/PostLoading";
 import PaginationControls from "./PaginationControls";
-import { authClient } from "@/app/lib/auth-client";
 
 export default function PostsGrid() {
   const searchParams = useSearchParams();
@@ -15,7 +14,7 @@ export default function PostsGrid() {
   const q = searchParams.get("q") || undefined;
   const tag = searchParams.get("tag") || undefined;
 
-  const { data, isError, error, refetch, isLoading } = useListPosts({
+  const { data, isError, isLoading } = useListPosts({
     isPublic: true,
     search: q,
     tag: tag,
@@ -23,16 +22,12 @@ export default function PostsGrid() {
     limit: 12,
   });
 
-  const { data: session } = authClient.useSession();
-  const author = session?.user
-    ? { name: session.user.name, image: session.user.image }
-    : undefined;
-  if (isError) {
-    return <PostsError message={error?.message} onRetry={refetch} />;
-  }
-
   const posts = data?.data ?? [];
   const totalPages = data?.totalPages ?? 1;
+
+  if (isError) {
+    return <PostsError />;
+  }
 
   return (
     <div>
@@ -46,9 +41,7 @@ export default function PostsGrid() {
                 No posts found matching your search.
               </p>
             ) : (
-              posts.map((post) => (
-                <Card key={post.id} post={post} author={author} />
-              ))
+              posts.map((post) => <Card key={post.id} post={post} />)
             )}
           </div>
 

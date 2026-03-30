@@ -33,7 +33,17 @@ export const CreatePost = os.Post.create
         authorId,
         isPublic: input.isPublic ?? true,
       },
-      include: { files: true, links: true },
+      include: { 
+        files: true, 
+        links: true,
+        author: {
+          select: {
+            id: true,
+            name: true,
+            image: true,
+          },
+        },
+      },
     });
     return data;
   });
@@ -65,7 +75,17 @@ export const UpdatePost = os.Post.update
         id,
       },
       data: bodyFields,
-      include: { files: true, links: true },
+      include: { 
+        files: true, 
+        links: true,
+        author: {
+          select: {
+            id: true,
+            name: true,
+            image: true,
+          },
+        },
+      },
     });
     return updated;
   });
@@ -77,7 +97,17 @@ export const DeletePost = os.Post.delete
       where: {
         id: input.id,
       },
-      include: { files: true, links: true },
+      include: { 
+        files: true, 
+        links: true,
+        author: {
+          select: {
+            id: true,
+            name: true,
+            image: true,
+          },
+        },
+      },
     });
     if (!post) {
       throw errors.NOT_FOUND({
@@ -159,7 +189,17 @@ export const ListPosts = os.Post.list.handler(async ({ input }) => {
       orderBy: { createdAt: "desc" },
       skip: (page - 1) * limit,
       take: limit,
-      include: { files: true, links: true },
+      include: { 
+        files: true, 
+        links: true,
+        author: {
+          select: {
+            id: true,
+            name: true,
+            image: true,
+          },
+        },
+      },
     }),
     prisma.post.count({ where }),
   ]);
