@@ -1,7 +1,6 @@
-// src/middlewares/auth.middleware.ts
 import { ORPCError } from '@orpc/server'
 import { auth } from '../lib/auth' 
-import { base } from '../../context'
+import { base } from '../lib/context'
 
 export const authMiddleware = base.middleware(async ({ context, next }) => {
   const sessionData = await auth.api.getSession({

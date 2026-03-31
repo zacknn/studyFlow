@@ -36,14 +36,14 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
         name: fullName,
         email,
         password,
-        callbackURL: "/private",
+        callbackURL: "/dashboard",
       },
       {
         onRequest: (ctx) => {
           console.log("Signup request started", ctx);
         },
         onSuccess: (ctx) => {
-          router.push("/private");
+          router.push("/dashboard");
         },
         onError: (ctx) => {
           alert(ctx.error.message);

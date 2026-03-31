@@ -34,10 +34,10 @@ export function LoginForm({
     e.preventDefault();
     setIsLoading(true);
     await authClient.signIn.email(
-      { email, password, callbackURL: "/private" },
+      { email, password, callbackURL: "/dashboard" },
       {
         onSuccess: () => {
-          router.push("/private");
+          router.push("/dashboard");
         },
         onError: (ctx) => {
           alert(ctx.error.message);
