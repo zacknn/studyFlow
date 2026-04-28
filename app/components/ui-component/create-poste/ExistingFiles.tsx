@@ -1,14 +1,10 @@
 import { FileSchema } from "@/app/schemas/posts.schemas"
 import type { z } from "zod"
 import { FileText } from "lucide-react"
+import { formatSize } from "@/app/lib/format_size"
+
 
 type File = z.infer<typeof FileSchema>
-
-function formatSize(bytes: number) {
-  if (bytes < 1024) return `${bytes} B`
-  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`
-  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`
-}
 
 export function ExistingFiles({ files }: { files: File[] }) {
   if (files.length === 0) return null

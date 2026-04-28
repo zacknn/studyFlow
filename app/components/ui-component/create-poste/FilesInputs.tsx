@@ -1,10 +1,9 @@
-// app/components/ui-component/create-post/FilesInput.tsx
 "use client"
 import { useRef, useState } from "react"
 import { FileEntry } from "@/app/types"
 import { Upload, FileText, X, Loader2 } from "lucide-react"
 import { useUploadThing } from "@/app/lib/uploadthing"
-
+import { formatSize } from "@/app/lib/format_size"
 export function FilesInput({ files, onChange }: {
   files: FileEntry[]
   onChange: (files: FileEntry[]) => void
@@ -30,13 +29,7 @@ export function FilesInput({ files, onChange }: {
       setIsUploading(false)
     },
   })
-
-  function formatSize(bytes: number) {
-    if (bytes < 1024) return `${bytes} B`
-    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`
-    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`
-  }
-
+  
   async function handleFiles(e: React.ChangeEvent<HTMLInputElement>) {
     const selected = Array.from(e.target.files ?? [])
     if (!selected.length) return
