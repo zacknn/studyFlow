@@ -17,12 +17,16 @@ export default function BrowseNotesPage() {
         {/* Search and Filters */}
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between mb-8">
           <div className="flex-1">
-            <SearchBar />
+            <Suspense>
+              <SearchBar />
+            </Suspense>
           </div>
-          <Filters
-            tags={["Math", "Science", "History", "Literature"]}
-            className="md:ml-4"
-          />
+          <Suspense>
+            <Filters
+              tags={["Math", "Science", "History", "Literature"]}
+              className="md:ml-4"
+            />
+          </Suspense>
         </div>
       </div>
 
