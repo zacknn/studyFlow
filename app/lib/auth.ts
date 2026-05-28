@@ -15,7 +15,6 @@ export const auth = betterAuth({
         subject: "Reset your password",
         html: `<p>Click <a href="${url}">here</a> to reset your password.</p>`,
       });
-      console.log("test to see the url :" , url);
     },
   },
   emailVerification: {
