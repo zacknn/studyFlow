@@ -5,7 +5,11 @@ import { Suspense } from "react";
 import PostsGrid from "@/app/components/ui-component/PostsGrid";
 import PostsLoading from "@/app/components/ui-loading/PostLoading";
 import Link from "next/link";
-export default function BrowseNotesPage() {
+import { auth } from "@/app/lib/auth";
+import { headers } from "next/headers";
+
+export default async function BrowseNotesPage() {
+  const session = await auth.api.getSession({ headers: await headers() })
   return (
     <div className="p-6">
       {/* Header */}
@@ -23,17 +27,19 @@ export default function BrowseNotesPage() {
           </div>
           <Suspense>
             <Filters
-              tags={["Math", "Science", "History", "Literature"]}
+              tags={["math", "science", "history", "literature", "art", "technology"]}
               className="md:ml-4"
             />
           </Suspense>
         </div>
       </div>
 
-      {/* button for adding new notes */}
-      <Link href={"/dashboard/create-post"}>
-        <Button className="mb-8">Add Note</Button>
-      </Link>
+      {/* button for adding new notes - only show if authenticated */}
+      {session?.user && (
+        <Link href={"/dashboard/create-post"}>
+          <Button className="mb-8">Add Note</Button>
+        </Link>
+      )}
 
       {/* Post Grid */}
       <Suspense fallback={<PostsLoading />}>

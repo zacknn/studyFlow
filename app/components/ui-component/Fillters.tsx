@@ -42,7 +42,7 @@ export default function Filters({ tags, className = '' }: FilterDropdownProps) {
           className="w-full px-4 py-3 text-left bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-slate-500 flex items-center justify-between"
         >
           <span className="truncate">
-            {currentTag === 'All' ? 'All Tags' : `#${currentTag}`}
+            {currentTag === 'All' ? 'All Tags' : `${currentTag}`}
           </span>
           <ChevronDown
             className={`w-5 h-5 transition-transform ${isOpen ? 'rotate-180' : ''}`}
@@ -70,7 +70,7 @@ export default function Filters({ tags, className = '' }: FilterDropdownProps) {
                   currentTag === tag ? 'bg-slate-100 dark:bg-slate-700 font-medium' : ''
                 }`}
               >
-                #{tag}
+                {tag}
               </button>
             ))}
           </div>
