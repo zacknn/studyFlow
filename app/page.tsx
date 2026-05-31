@@ -11,9 +11,13 @@ export default function Home() {
       <Navbar />
       <main className="pt-16">
         <div className="max-w-7xl mx-auto px-6 py-8">
+          <div className="m-30">
           <Hero />
+          </div>
           <ServicesGrid />
+          <div className="m-20">
           <InteractiveDemo />
+          </div>
           <AuthCTA />
         </div>
       </main>
