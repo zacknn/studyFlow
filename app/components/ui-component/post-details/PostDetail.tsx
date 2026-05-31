@@ -1,5 +1,6 @@
 "use client";
 import { useEffect } from "react";
+import Link from "next/link";
 import { useGetPost, useIncrementViews } from "@/app/lib/queries/post.queries";
 import { PostActions } from "./PostActions";
 import { PostFiles } from "./PostFiles";
@@ -8,6 +9,7 @@ import PostsError from "../../ui-loading/PostsError";
 import { Tag, Globe, Lock } from "lucide-react";
 import { PostDetailSkeleton } from "../../ui-loading/PostDetailSkeleton";
 import { VoiceTeacher } from "../ai/VoiceTeacher";
+import { AuthorBadge } from "../AuthorBadge";
 export function PostDetail({ id }: { id: string }) {
   const { data: post, isLoading, isError, error, refetch } = useGetPost(id);
   const { mutate: incrementViews } = useIncrementViews();
@@ -91,7 +93,7 @@ export function PostDetail({ id }: { id: string }) {
         )}
 
         {/* Date */}
-        <p className="text-xs text-slate-400 mt-4">
+        <p className="text-xs text-slate-400 mt-4 mb-4">
           Posted{" "}
           {new Date(post.createdAt).toLocaleDateString("en-US", {
             year: "numeric",
@@ -99,6 +101,19 @@ export function PostDetail({ id }: { id: string }) {
             day: "numeric",
           })}
         </p>
+
+        {/* Author Badge */}
+        {post.author && (
+          <Link href={`/dashboard/profile/${post.author.id}`} className="hover:opacity-80 transition-opacity">
+            <AuthorBadge 
+              author={{
+                name: post.author.name,
+                image: post.author.image
+              }}
+              size="md"
+            />
+          </Link>
+        )}
       </div>
 
       {/* Files */}
