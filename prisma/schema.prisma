@@ -26,8 +26,10 @@ model User {
   posts         Post[]
   aiHistory     AIHistory[]
   createdAt     DateTime    
-  updatedAt     DateTime    
-
+  updatedAt     DateTime   
+  discussions    Discussion[]
+  comments       Comment[] 
+  
   // Better Auth prefers lowercase table names usually, but optional
   @@map("user")
 }
@@ -161,4 +163,31 @@ model AIMessage {
   createdAt DateTime  @default(now())
 
   @@map("ai_message")
+}
+
+model Discussion {
+  id        String    @id @default(cuid())
+  title     String
+  content   String    @db.Text
+  tags      String[]
+  authorId  String
+  author    User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  comments  Comment[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@map("discussion")
+}
+
+model Comment {
+  id           String     @id @default(cuid())
+  content      String     @db.Text
+  authorId     String
+  author       User       @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  discussionId String
+  discussion   Discussion @relation(fields: [discussionId], references: [id], onDelete: Cascade)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  @@map("comment")
 }
