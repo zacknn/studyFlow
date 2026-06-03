@@ -9,9 +9,17 @@ import {
   IncrementLikes,
   IncrementViews,
 } from "./post";
-import { CreateFile , DeleteFile } from "./file";
-import { CreateLink , UpdateLink , DeleteLink } from "./link";
-import { ListChats , DeleteChat , GetChat } from "./ai";
+import { CreateFile, DeleteFile } from "./file";
+import { CreateLink, UpdateLink, DeleteLink } from "./link";
+import { ListChats, DeleteChat, GetChat } from "./ai";
+import {
+  CreateDiscussion,
+  ListDiscussions,
+  GetDiscussionById,
+  UpdateDiscussion,
+  DeleteDiscussion,
+} from "./discussion";
+import { CreateComment, UpdateComment, DeleteComment } from "./comment";
 
 const os = implement(contract).$context<{ headers: Headers }>();
 
@@ -38,5 +46,17 @@ export const router = os.router({
     listChats: ListChats,
     getChat: GetChat,
     deleteChat: DeleteChat,
+  },
+  Discussion: {
+    create: CreateDiscussion,
+    list: ListDiscussions,
+    getById: GetDiscussionById,
+    update: UpdateDiscussion,
+    delete: DeleteDiscussion,
+  },
+  Comment: {
+    create: CreateComment,
+    update: UpdateComment,
+    delete: DeleteComment,
   }
 });

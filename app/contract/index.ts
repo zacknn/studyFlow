@@ -18,6 +18,19 @@ import {
   GetChatContract,
   DeleteChatContract,
 } from "./ai.contract";
+import {
+  CreateDiscussionContract,
+  ListDiscussionsContract,
+  GetDiscussionByIdContract,
+  UpdateDiscussionContract,
+  DeleteDiscussionContract,
+} from "./discussion.contract";
+
+import {
+  CreateCommentContract,
+  UpdateCommentContract,
+  DeleteCommentContract,
+} from "./comment.contract";
 
 export const contract = {
   Post: {
@@ -42,5 +55,17 @@ export const contract = {
     listChats: ListChatsContract,
     getChat : GetChatContract,
     deleteChat: DeleteChatContract,
-  }
+  },
+  Discussion: {
+    create: CreateDiscussionContract,
+    list: ListDiscussionsContract,
+    getById: GetDiscussionByIdContract,
+    update: UpdateDiscussionContract,
+    delete: DeleteDiscussionContract,
+  },
+  Comment: {
+    create: CreateCommentContract,
+    update: UpdateCommentContract,
+    delete: DeleteCommentContract,
+  },  
 };
