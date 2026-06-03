@@ -46,7 +46,7 @@ export default function Navbar() {
             AI Tutor
           </Link>
           <Link
-            href="#"
+            href="/dashboard/community"
             className="hover:text-slate-900 dark:hover:text-white transition-colors"
           >
             Community

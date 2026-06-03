@@ -20,3 +20,5 @@ export const MutationOutputSchema = z.object({
 
 export type CreateCommentInput = z.infer<typeof CreateCommentInputSchema>
 export type UpdateCommentInput = z.infer<typeof UpdateCommentInputSchema>
+export type DeleteCommentInput = z.infer<typeof DeleteCommentInputSchema>
+export type MutationOutput = z.infer<typeof MutationOutputSchema>

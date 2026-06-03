@@ -89,3 +89,4 @@ export type Discussion = z.infer<typeof DiscussionSchema>
 export type DiscussionSummary = z.infer<typeof DiscussionSummarySchema>
 export type CreateDiscussionInput = z.infer<typeof CreateDiscussionInputSchema>
 export type UpdateDiscussionInput = z.infer<typeof UpdateDiscussionInputSchema>
+export type Comment = z.infer<typeof CommentSchema>
