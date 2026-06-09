@@ -19,7 +19,7 @@ export default function PostsGrid() {
     search: q,
     tag: tag,
     page: currentPage,
-    limit: 12,
+    limit: 6,
   });
 
   const posts = data?.data ?? [];

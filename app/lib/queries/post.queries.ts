@@ -13,7 +13,7 @@ export function useListPosts(input?: {
 }) {
   return useQuery(
     orpc.Post.list.queryOptions({
-      input: { page: 1, limit: 12, ...input },
+      input: { page: 1, limit: 6, ...input },
     }),
   );
 }

@@ -26,8 +26,13 @@ export default async function BrowseNotesPage() {
             </Suspense>
           </div>
           <Suspense>
+            {/* i think i got too far , for now i it will stay like that  */}
             <Filters
-              tags={["math", "science", "history", "literature", "art", "technology"]}
+              tags={["math", "science", "history", "literature", "art", "technology", "ai" , "programming",
+                 "language", "philosophy", "psychology", "health", "fitness", "finance", "business", "marketing", "design", 
+                 "music", "travel", "food", "sports", "machine learning", "data science", "web development", "mobile development", 
+                 "cloud computing", "cybersecurity", "blockchain", "cryptocurrency", "personal development", "productivity", 
+                 "mental health", "relationships", "parenting", "education", "career", "entrepreneurship", "self-improvement"]}
               className="md:ml-4"
             />
           </Suspense>
