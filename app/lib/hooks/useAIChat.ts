@@ -1,31 +1,53 @@
 "use client"
+
 import { useChat } from "@ai-sdk/react"
 import { DefaultChatTransport } from "ai"
-import { useState, useCallback } from "react"
-import { useQueryClient } from "@tanstack/react-query"
-import { orpc } from "../orpc"
+import { useState, useCallback, useRef, useEffect } from "react"
 
-export function useAIChat(postId?: string) {
+export function useAIChat() {
   const [chatId, setChatId] = useState<string | null>(null)
-  const queryClient = useQueryClient()
+  const chatIdRef = useRef<string | null>(null)
+
+  useEffect(() => {
+    chatIdRef.current = chatId
+  }, [chatId])
 
   const chat = useChat({
     transport: new DefaultChatTransport({
       api: "/api/ai/chat",
-      body: { postId, chatId },
-    }), 
-    onFinish: () => {
-      // refresh sidebar chat list when message finishes
-      queryClient.invalidateQueries({
-        queryKey: orpc.AI.listChats.key()
-      })
-    },
+      prepareSendMessagesRequest: ({ messages }) => ({
+        body: {
+          messages,
+          chatId: chatIdRef.current,
+        },
+      }),
+      fetch: async (url, options) => {
+        const response = await fetch(url, options)
+        const newChatId = response.headers.get("X-Chat-Id")
+        if (newChatId && newChatId !== chatIdRef.current) {
+          setChatId(newChatId)
+        }
+        return response
+      },
+    }),
   })
+
+  // ── KEEP setMessages IN A REF so resetChat doesn't depend on chat ──
+  const setMessagesRef = useRef(chat.setMessages)
+  useEffect(() => {
+    setMessagesRef.current = chat.setMessages
+  }, [chat.setMessages])
 
   const resetChat = useCallback(() => {
     setChatId(null)
-    chat.setMessages([])
-  }, [chat])
+    chatIdRef.current = null
+    setMessagesRef.current([])
+  }, []) // ← NO dependencies = stable forever
 
-  return { ...chat, chatId, setChatId, resetChat }
+  return {
+    ...chat,
+    hookChatId: chatId,
+    setChatId,
+    resetChat,
+  }
 }
