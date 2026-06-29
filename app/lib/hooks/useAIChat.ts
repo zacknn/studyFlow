@@ -13,7 +13,7 @@ export function useAIChat(postId?: string) {
     transport: new DefaultChatTransport({
       api: "/api/ai/chat",
       body: { postId, chatId },
-    }),
+    }), 
     onFinish: () => {
       // refresh sidebar chat list when message finishes
       queryClient.invalidateQueries({

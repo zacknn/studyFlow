@@ -4,9 +4,7 @@ import { auth } from "@/app/lib/auth";
 import { headers } from "next/headers";
 import prisma from "@/app/lib/prisma";
 
-
 export async function POST(req: Request) {
-  // check auth
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session?.user) {
     return Response.json({ error: "Unauthorized" }, { status: 401 });
@@ -24,6 +22,23 @@ export async function POST(req: Request) {
     }))
     .filter((m: any) => m.content);
 
+  const lastUserMessage = formattedMessages
+    .filter((m: any) => m.role === "user")
+    .at(-1)?.content ?? "";
+
+  /* ── CREATE CHAT BEFORE STREAMING ── */
+  let savedChatId = chatId;
+  if (!chatId) {
+    const newChat = await prisma.aIHistory.create({
+      data: {
+        userId: session.user.id,
+        postId: postId ?? null,
+        title: lastUserMessage.slice(0, 50),
+      },
+    });
+    savedChatId = newChat.id;
+  }
+
   // build system prompt
   let systemPrompt = `You are a helpful AI study assistant. 
   Help students understand concepts clearly and simply.
@@ -32,19 +47,15 @@ export async function POST(req: Request) {
   if (postId) {
     const post = await prisma.post.findUnique({
       where: { id: postId },
-      include: { files: true }
-    })
+      include: { files: true },
+    });
     if (post) {
       systemPrompt = `You are a helpful AI study assistant helping with "${post.title}".
       ${post.description ? `About: ${post.description}` : ""}
       ${post.tags.length > 0 ? `Topics: ${post.tags.join(", ")}` : ""}
-      Be clear, concise and encouraging.`
+      Be clear, concise and encouraging.`;
     }
   }
-
-  const lastUserMessage = formattedMessages
-    .filter((m: any) => m.role === "user")
-    .at(-1)?.content ?? ""
 
   const result = streamText({
     model: google("gemini-2.5-flash"),
@@ -52,39 +63,29 @@ export async function POST(req: Request) {
     messages: formattedMessages,
     onFinish: async ({ text }) => {
       try {
-        let savedChatId = chatId
-
-        if (chatId) {
-          // existing chat — just add new messages
-          await prisma.aIMessage.createMany({
-            data: [
-              { chatId, role: "user", content: lastUserMessage },
-              { chatId, role: "assistant", content: text },
-            ]
-          })
-        } else {
-          // new chat — create session + messages
-          const newChat = await prisma.aIHistory.create({
-            data: {
-              userId: session.user.id,
-              postId: postId ?? null,
-              title: lastUserMessage.slice(0, 50),
-              messages: {
-                create: [
-                  { role: "user", content: lastUserMessage },
-                  { role: "assistant", content: text },
-                ]
-              }
-            }
-          })
-          savedChatId = newChat.id
-        }
-
+        // Chat already exists — just save the messages
+        await prisma.aIMessage.createMany({
+          data: [
+            { chatId: savedChatId, role: "user", content: lastUserMessage },
+            { chatId: savedChatId, role: "assistant", content: text },
+          ],
+        });
       } catch (err) {
-        console.error("Failed to save chat:", err)
+        console.error("Failed to save chat:", err);
       }
-    }
-  })
+    },
+  });
 
-  return result.toTextStreamResponse();
+  /* ── RETURN CHAT ID IN HEADER ── */
+  const streamResponse = result.toTextStreamResponse();
+  const responseHeaders = new Headers(streamResponse.headers);
+  if (savedChatId) {
+    responseHeaders.set("X-Chat-Id", savedChatId);
+  }
+
+  return new Response(streamResponse.body, {
+    status: streamResponse.status,
+    statusText: streamResponse.statusText,
+    headers: responseHeaders,
+  });
 }
