@@ -32,7 +32,7 @@ export function useAIChat() {
     }),
   })
 
-  // ── KEEP setMessages IN A REF so resetChat doesn't depend on chat ──
+  // Stable resetChat — no dependency on changing `chat` object
   const setMessagesRef = useRef(chat.setMessages)
   useEffect(() => {
     setMessagesRef.current = chat.setMessages
@@ -42,7 +42,7 @@ export function useAIChat() {
     setChatId(null)
     chatIdRef.current = null
     setMessagesRef.current([])
-  }, []) // ← NO dependencies = stable forever
+  }, [])
 
   return {
     ...chat,

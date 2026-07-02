@@ -30,16 +30,17 @@ export function ChatArea({ chatId, onChatCreated }: ChatAreaProps) {
   const notifiedRef = useRef<string | null>(null)
   const isLoading = status === "streaming" || status === "submitted"
 
-  // ── NOTIFY PARENT ONCE when new chat is created ──
+  // Notify parent ONCE when new chat is created
   useEffect(() => {
     if (hookChatId && !chatId && notifiedRef.current !== hookChatId) {
       notifiedRef.current = hookChatId
-      const title = messages.find(m => m.role === "user")?.content?.slice(0, 50) ?? "New Chat"
+      const firstUser = messages.find((m) => m.role === "user")
+      const title = firstUser?.parts?.find((p) => p.type === "text")?.text?.slice(0, 50) ?? "New Chat"
       onChatCreated(hookChatId, title)
     }
-  }, [hookChatId, chatId, onChatCreated, messages])
+  }, [hookChatId, chatId, onChatCreated])
 
-  // ── LOAD EXISTING CHAT from DB (only once per chatId) ──
+  // Load existing chat from DB (once per chatId)
   useEffect(() => {
     if (existingChat && chatId && loadedRef.current !== chatId) {
       loadedRef.current = chatId
@@ -49,13 +50,12 @@ export function ChatArea({ chatId, onChatCreated }: ChatAreaProps) {
           id: m.id,
           role: m.role as "user" | "assistant",
           parts: [{ type: "text" as const, text: m.content }],
-          content: m.content,
         }))
       )
     }
   }, [chatId, existingChat, setChatId, setMessages])
 
-  // ── RESET when "New Chat" clicked (chatId prop becomes null) ──
+  // Reset when "New Chat" clicked
   useEffect(() => {
     if (!chatId) {
       loadedRef.current = null

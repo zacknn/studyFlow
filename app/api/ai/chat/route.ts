@@ -1,5 +1,5 @@
 import { google } from "@ai-sdk/google"
-import { streamText } from "ai"
+import { streamText, convertToModelMessages, UIMessage } from "ai"
 import { auth } from "@/app/lib/auth"
 import { headers } from "next/headers"
 import prisma from "@/app/lib/prisma"
@@ -10,22 +10,14 @@ export async function POST(req: Request) {
     return Response.json({ error: "Unauthorized" }, { status: 401 })
   }
 
-  const { messages, chatId } = await req.json()
+  const { messages, chatId }: { messages: UIMessage[]; chatId: string | null } = await req.json()
 
-  const formattedMessages = messages
-    .map((m: any) => ({
-      role: m.role,
-      content: m.parts
-        ? m.parts.map((p: any) => p.text ?? "").join("")
-        : (m.content ?? ""),
-    }))
-    .filter((m: any) => m.content)
+  const lastUserMessage = messages
+    .filter((m) => m.role === "user")
+    .at(-1)?.parts
+    ?.find((p) => p.type === "text")?.text ?? ""
 
-  const lastUserMessage = formattedMessages
-    .filter((m: any) => m.role === "user")
-    .at(-1)?.content ?? ""
-
-  // Create chat BEFORE streaming so client gets the ID immediately
+  // Create chat BEFORE streaming
   let savedChatId = chatId
   if (!savedChatId) {
     const newChat = await prisma.aIHistory.create({
@@ -40,7 +32,7 @@ export async function POST(req: Request) {
   const result = streamText({
     model: google("gemini-2.5-flash"),
     system: "You are a helpful AI study assistant. Be clear, concise, and encouraging.",
-    messages: formattedMessages,
+    messages: await convertToModelMessages(messages),
     onFinish: async ({ text }) => {
       try {
         await prisma.aIMessage.createMany({
@@ -55,16 +47,18 @@ export async function POST(req: Request) {
     },
   })
 
-  // Return stream with chat ID in header
-  const streamResponse = result.toTextStreamResponse()
-  const responseHeaders = new Headers(streamResponse.headers)
+  // ── ai@7: built-in method, no extra imports needed ──
+  const response = result.toUIMessageStreamResponse()
+
+  // Inject X-Chat-Id header
+  const responseHeaders = new Headers(response.headers)
   if (savedChatId) {
     responseHeaders.set("X-Chat-Id", savedChatId)
   }
 
-  return new Response(streamResponse.body, {
-    status: streamResponse.status,
-    statusText: streamResponse.statusText,
+  return new Response(response.body, {
+    status: response.status,
+    statusText: response.statusText,
     headers: responseHeaders,
   })
 }

@@ -1,24 +1,30 @@
-"use client"
+"use client";
 
-import { Plus, MessageSquare, Trash2, Bot } from "lucide-react"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { cn } from "@/lib/utils"
+import { Plus, MessageSquare, Trash2, Bot } from "lucide-react";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { cn } from "@/lib/utils";
 
 interface Chat {
-  id: string
-  title: string | null
-  updatedAt: Date
+  id: string;
+  title: string | null;
+  updatedAt: Date;
 }
 
 interface AISidebarProps {
-  chats: Chat[]
-  activeChatId: string | null
-  onSelectChat: (id: string) => void
-  onNewChat: () => void
-  onDeleteChat: (id: string) => void
+  chats: Chat[];
+  activeChatId: string | null;
+  onSelectChat: (id: string) => void;
+  onNewChat: () => void;
+  onDeleteChat: (id: string) => void;
 }
 
-export function AISidebar({ chats, activeChatId, onSelectChat, onNewChat, onDeleteChat }: AISidebarProps) {
+export function AISidebar({
+  chats,
+  activeChatId,
+  onSelectChat,
+  onNewChat,
+  onDeleteChat,
+}: AISidebarProps) {
   return (
     <div className="w-64 flex flex-col border-r border-slate-800/60 bg-slate-900/50 shrink-0">
       {/* Header */}
@@ -58,7 +64,7 @@ export function AISidebar({ chats, activeChatId, onSelectChat, onNewChat, onDele
                 "group flex items-center gap-2.5 rounded-xl px-2.5 py-2 cursor-pointer transition-colors",
                 activeChatId === chat.id
                   ? "bg-slate-700/80 text-white"
-                  : "text-slate-500 hover:bg-slate-800/60 hover:text-slate-300"
+                  : "text-slate-500 hover:bg-slate-800/60 hover:text-slate-300",
               )}
             >
               <MessageSquare className="w-3.5 h-3.5 shrink-0" />
@@ -67,8 +73,8 @@ export function AISidebar({ chats, activeChatId, onSelectChat, onNewChat, onDele
               </span>
               <button
                 onClick={(e) => {
-                  e.stopPropagation()
-                  onDeleteChat(chat.id)
+                  e.stopPropagation();
+                  onDeleteChat(chat.id);
                 }}
                 className="opacity-0 group-hover:opacity-100 p-0.5 hover:text-rose-400 transition-opacity shrink-0"
               >
@@ -79,5 +85,5 @@ export function AISidebar({ chats, activeChatId, onSelectChat, onNewChat, onDele
         </div>
       </ScrollArea>
     </div>
-  )
+  );
 }

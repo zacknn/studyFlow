@@ -1,5 +1,6 @@
 import { Bot, User } from "lucide-react"
 import type { UIMessage } from "ai"
+import { Markdown } from "./Markdown"
 
 interface MessageBubbleProps {
   message: UIMessage
@@ -7,6 +8,11 @@ interface MessageBubbleProps {
 }
 
 export function MessageBubble({ message, isUser }: MessageBubbleProps) {
+  const text = message.parts
+    ?.filter((p) => p.type === "text")
+    .map((p) => p.text)
+    .join("") ?? ""
+
   return (
     <div className={`flex gap-3 ${isUser ? "justify-end" : "justify-start"}`}>
       {!isUser && (
@@ -22,10 +28,10 @@ export function MessageBubble({ message, isUser }: MessageBubbleProps) {
             : "bg-slate-800/70 border border-slate-700/40 text-slate-200 rounded-tl-sm"
         }`}
       >
-        {message.parts?.map((part, i) =>
-          part.type === "text" ? (
-            <span key={i} className="whitespace-pre-wrap">{part.text}</span>
-          ) : null
+        {isUser ? (
+          <span className="whitespace-pre-wrap">{text}</span>
+        ) : (
+          <Markdown text={text} />
         )}
       </div>
 
