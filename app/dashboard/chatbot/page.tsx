@@ -1,44 +1,56 @@
-"use client";
-import { useState } from "react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { ArrowBigLeft } from "lucide-react";
-import React from "react";
+import { redirect } from "next/navigation"
+import { headers } from "next/headers"
+import { auth } from "@/app/lib/auth"
+import prisma from "@/app/lib/prisma"
+import { ChatbotShell } from "@/app/components/ui-component/ai/chatbot/ChatbotShell"
 
-function Chatbot() {
-  const [isOpen, setIsOpen] = useState(true); // Default to true so it starts open
+export default async function ChatbotPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ chat?: string }>
+}) {
+  const { chat: activeChatId } = await searchParams
+
+  const session = await auth.api.getSession({ headers: await headers() })
+  if (!session?.user) {
+    redirect("/login")
+  }
+
+  const [initialChats, initialActiveChat] = await Promise.all([
+    prisma.aIHistory.findMany({
+      where: { userId: session.user.id },
+      orderBy: { updatedAt: "desc" },
+      take: 20,
+      include: { messages: true },
+    }),
+    activeChatId
+      ? prisma.aIHistory.findFirst({
+          where: { id: activeChatId, userId: session.user.id },
+          include: { messages: { orderBy: { createdAt: "asc" } } },
+        })
+      : null,
+  ])
 
   return (
-    <div className="flex h-screen w-full">
-      {/* 1. Dynamic Width: Changes between w-56 and w-16 based on isOpen */}
-      <aside 
-        className={`border-r flex flex-col p-3 gap-2 transition-all duration-300 ${
-          isOpen ? "w-56" : "w-16 items-center"
-        }`}
-      >
-        {/* Toggle Button */}
-        <Button 
-          onClick={() => setIsOpen(!isOpen)} 
-          variant="outline" 
-          className="justify-start gap-2 w-full"
-        >
-          {/* 2. Dynamic Rotation: Flips the arrow 180 degrees when closed */}
-          <ArrowBigLeft className={`w-4 h-4 transition-transform duration-300 ${!isOpen ? "rotate-180" : ""}`} />
-          {isOpen && <span>Collapse</span>}
-        </Button>
+    <div className="max-w-7xl mx-auto px-6 py-8">
+      <div className="text-center max-w-2xl mx-auto mb-10">
+        <h1 className="text-4xl md:text-5xl font-semibold tracking-tight leading-[1.1] mb-4 text-slate-900 dark:text-white">
+          Your{" "}
+          <span className="bg-rose-500 text-white px-3 py-1 rounded-lg inline-block transform -rotate-1 shadow-lg shadow-rose-500/20">
+            AI study
+          </span>{" "}
+          assistant
+        </h1>
+        <p className="text-lg text-slate-500 dark:text-slate-400 leading-relaxed">
+          Ask questions, work through problems, and pick up right where you left off.
+        </p>
+      </div>
 
-        {/* New Chat Button - Text hides when sidebar is closed */}
-        <Button variant="outline" className="justify-start gap-2 w-full">
-          <span>+</span>
-          {isOpen && <span>New chat</span>}
-        </Button>
-
-        {isOpen && <p className="text-xs text-muted-foreground px-2 mt-2">Recent</p>}
-      </aside>
-
-      
+      <ChatbotShell
+        initialChats={initialChats}
+        initialActiveChat={initialActiveChat}
+        activeChatId={initialActiveChat ? activeChatId! : null}
+      />
     </div>
-  );
+  )
 }
-
-export default Chatbot;
