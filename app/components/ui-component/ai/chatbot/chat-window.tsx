@@ -8,19 +8,16 @@ import { useAIChat } from "@/app/lib/hooks/useAIChat"
 import { useGetChat } from "@/app/lib/queries/ai.queries"
 import { MessageBubble } from "./message-bubble"
 import { ChatEmptyState } from "./chat-empty-state"
-import type { ChatDetail } from "@/app/types/index"
 
 export function ChatWindow({
   chatId,
-  initialChat,
   onChatCreated,
 }: {
   chatId: string | null
-  initialChat: ChatDetail | null
   onChatCreated: (id: string) => void
 }) {
   const queryClient = useQueryClient()
-  const { data: existingChat, isLoading: isLoadingHistory } = useGetChat(chatId, initialChat ?? undefined)
+  const { data: existingChat, isLoading: isLoadingHistory } = useGetChat(chatId)
   const { messages, sendMessage, status, stop, setMessages, setChatId, hookChatId } = useAIChat()
 
   const [input, setInput] = useState("")
@@ -29,7 +26,7 @@ export function ChatWindow({
   const navigatedRef = useRef(false)
   const prevStatusRef = useRef(status)
 
-  // Hydrate an existing conversation (from the server, or a cached client fetch) once.
+  // Hydrate an existing conversation once its messages arrive.
   useEffect(() => {
     if (chatId && existingChat && !hydratedRef.current) {
       hydratedRef.current = true

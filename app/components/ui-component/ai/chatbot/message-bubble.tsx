@@ -1,7 +1,7 @@
 "use client"
 
 import { Bot } from "lucide-react"
-import { cn } from "@/lib/utils"
+import { Markdown } from "./Markdown"
 
 export interface SimpleMessage {
   id: string
@@ -22,7 +22,7 @@ export function MessageBubble({ message }: { message: SimpleMessage }) {
     return (
       <div className="flex justify-end">
         <div className="max-w-[85%] rounded-2xl rounded-tr-sm bg-rose-500 px-4 py-2.5 text-sm text-white">
-          <p className="whitespace-pre-wrap break-words">{text}</p>
+          <Markdown text={text} className="whitespace-pre-wrap break-words" />
         </div>
       </div>
     )
@@ -34,7 +34,7 @@ export function MessageBubble({ message }: { message: SimpleMessage }) {
         <Bot className="h-4 w-4 text-slate-600 dark:text-slate-300" />
       </div>
       <div className="max-w-[85%] rounded-2xl rounded-tl-sm bg-slate-100 dark:bg-slate-800 px-4 py-3 text-sm text-slate-800 dark:text-slate-200">
-        <p className="whitespace-pre-wrap break-words leading-relaxed">{text}</p>
+        <Markdown text={text} className="whitespace-pre-wrap break-words leading-relaxed" />
       </div>
     </div>
   )

@@ -1,7 +1,6 @@
 import { redirect } from "next/navigation"
 import { headers } from "next/headers"
 import { auth } from "@/app/lib/auth"
-import prisma from "@/app/lib/prisma"
 import { ChatbotShell } from "@/app/components/ui-component/ai/chatbot/ChatbotShell"
 
 export default async function ChatbotPage({
@@ -9,27 +8,12 @@ export default async function ChatbotPage({
 }: {
   searchParams: Promise<{ chat?: string }>
 }) {
-  const { chat: activeChatId } = await searchParams
+  const { chat } = await searchParams
 
   const session = await auth.api.getSession({ headers: await headers() })
   if (!session?.user) {
     redirect("/login")
   }
-
-  const [initialChats, initialActiveChat] = await Promise.all([
-    prisma.aIHistory.findMany({
-      where: { userId: session.user.id },
-      orderBy: { updatedAt: "desc" },
-      take: 20,
-      include: { messages: true },
-    }),
-    activeChatId
-      ? prisma.aIHistory.findFirst({
-          where: { id: activeChatId, userId: session.user.id },
-          include: { messages: { orderBy: { createdAt: "asc" } } },
-        })
-      : null,
-  ])
 
   return (
     <div className="max-w-7xl mx-auto px-6 py-8">
@@ -46,11 +30,7 @@ export default async function ChatbotPage({
         </p>
       </div>
 
-      <ChatbotShell
-        initialChats={initialChats}
-        initialActiveChat={initialActiveChat}
-        activeChatId={initialActiveChat ? activeChatId! : null}
-      />
+      <ChatbotShell activeChatId={chat ?? null} />
     </div>
   )
 }

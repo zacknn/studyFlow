@@ -5,18 +5,15 @@ import Link from "next/link"
 import { MessageSquare, Plus, Trash2, X } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useListChat, useDeleteChat } from "@/app/lib/queries/ai.queries"
-import type { ChatSummary } from "@/app/types/index"
 
 export function ChatSidebar({
-  initialChats,
   activeChatId,
   onActiveChatDeleted,
 }: {
-  initialChats: ChatSummary[]
   activeChatId: string | null
   onActiveChatDeleted: () => void
 }) {
-  const { data: chats } = useListChat(initialChats)
+  const { data: chats } = useListChat()
   const deleteChat = useDeleteChat()
   const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null)
 

@@ -4,17 +4,8 @@ import { useRouter } from "next/navigation"
 import { useCallback } from "react"
 import { ChatSidebar } from "./chat-sidebar"
 import { ChatWindow } from "./chat-window"
-import type { ChatDetail, ChatSummary } from "@/app/types/index"
 
-export function ChatbotShell({
-  initialChats,
-  initialActiveChat,
-  activeChatId,
-}: {
-  initialChats: ChatSummary[]
-  initialActiveChat: ChatDetail | null
-  activeChatId: string | null
-}) {
+export function ChatbotShell({ activeChatId }: { activeChatId: string | null }) {
   const router = useRouter()
 
   // Imperative navigation for events that aren't a direct link click
@@ -28,13 +19,8 @@ export function ChatbotShell({
 
   return (
     <div className="flex h-[calc(100vh-20rem)] min-h-[560px] gap-6">
-      <ChatSidebar initialChats={initialChats} activeChatId={activeChatId} onActiveChatDeleted={() => goToChat(null)} />
-      <ChatWindow
-        key={activeChatId ?? "new"}
-        chatId={activeChatId}
-        initialChat={initialActiveChat}
-        onChatCreated={goToChat}
-      />
+      <ChatSidebar activeChatId={activeChatId} onActiveChatDeleted={() => goToChat(null)} />
+      <ChatWindow key={activeChatId ?? "new"} chatId={activeChatId} onChatCreated={goToChat} />
     </div>
   )
 }
