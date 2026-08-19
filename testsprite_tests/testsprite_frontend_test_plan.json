@@ -1,0 +1,844 @@
+[
+  {
+    "id": "TC001",
+    "title": "Guest can create an account and reach the dashboard",
+    "description": "This test verifies that a guest can register successfully and is taken into the authenticated dashboard afterward.",
+    "category": "User Authentication",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /signup"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the account details with valid new user information"
+      },
+      {
+        "type": "action",
+        "description": "Submit the registration form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the authenticated dashboard is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC002",
+    "title": "Registered user can sign in and reach the dashboard",
+    "description": "This test verifies that a registered user can log in successfully and access the authenticated dashboard.",
+    "category": "User Authentication",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the authenticated dashboard is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC003",
+    "title": "Student can ask the AI tutor and receive an answer",
+    "description": "This test verifies that a signed-in user can send a question in the AI tutor workspace and see an AI response.",
+    "category": "AI Tutor and Chat",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /dashboard/ai-tutor"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the message field with a study question"
+      },
+      {
+        "type": "action",
+        "description": "Submit the message"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify an AI response is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC004",
+    "title": "User can browse notes, search for a note, and upload a supported study file",
+    "description": "This test verifies that a signed-in user can browse notes, find a note by search or selection, and upload a supported study file successfully.",
+    "category": "Study Dashboard",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /dashboard/browse-note"
+      },
+      {
+        "type": "action",
+        "description": "Search for a study note"
+      },
+      {
+        "type": "action",
+        "description": "Select a note from the results"
+      },
+      {
+        "type": "action",
+        "description": "Upload a supported study file"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the note content and uploaded study file are displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC005",
+    "title": "Student can use a suggested AI prompt",
+    "description": "This test verifies that a signed-in user can choose a suggested prompt in the AI tutor and receive a generated answer.",
+    "category": "AI Tutor and Chat",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /dashboard/ai-tutor"
+      },
+      {
+        "type": "action",
+        "description": "Choose a suggested prompt"
+      },
+      {
+        "type": "action",
+        "description": "Submit the prompt"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a generated AI answer is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC006",
+    "title": "Upload a supported study file",
+    "description": "An authenticated user can upload a supported study file and see it added for study use.",
+    "category": "Notes Browsing and File Uploads",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the study notes browsing link"
+      },
+      {
+        "type": "action",
+        "description": "Upload a supported study file"
+      },
+      {
+        "type": "action",
+        "description": "Wait for the upload to complete"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the uploaded file is available for study use"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC007",
+    "title": "User can comment on a post and open the author profile",
+    "description": "This test verifies that a signed-in user can add a comment on a community post and then open the author's profile.",
+    "category": "Study Dashboard",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /dashboard/community"
+      },
+      {
+        "type": "action",
+        "description": "Open a community post"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the comment field with a meaningful comment"
+      },
+      {
+        "type": "action",
+        "description": "Submit the comment"
+      },
+      {
+        "type": "action",
+        "description": "Open the author profile"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the comment and author profile are displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC008",
+    "title": "Create and publish a community post",
+    "description": "A content contributor can enter post information, publish a post, and see it appear in the community feed.",
+    "category": "Community Discussions",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the create post link"
+      },
+      {
+        "type": "action",
+        "description": "Enter post information"
+      },
+      {
+        "type": "action",
+        "description": "Publish the post"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the new post is available in the community"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC009",
+    "title": "Browse and open a study note",
+    "description": "An authenticated user can browse available notes and open a selected note to review its contents.",
+    "category": "Notes Browsing and File Uploads",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the study notes browsing link"
+      },
+      {
+        "type": "action",
+        "description": "Open a note from the available results"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the selected study note is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify note content is visible"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC010",
+    "title": "Authenticated user can open the study dashboard and move to study and community sections",
+    "description": "This test verifies that a signed-in user can open the dashboard and navigate between the main study and community areas.",
+    "category": "Study Dashboard",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /dashboard"
+      },
+      {
+        "type": "action",
+        "description": "Open the study section"
+      },
+      {
+        "type": "action",
+        "description": "Open the community section"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the dashboard workspace sections are displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC011",
+    "title": "Add a comment to a community post",
+    "description": "A community commenter can read a post, add a comment, and see the comment appear in the discussion.",
+    "category": "Community Discussions",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the community discussions link"
+      },
+      {
+        "type": "action",
+        "description": "Open a post from the community feed"
+      },
+      {
+        "type": "action",
+        "description": "Add a comment to the discussion"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the new comment is visible in the discussion"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC012",
+    "title": "Authenticated user can sign out and return to the public flow",
+    "description": "This test verifies that a signed-in user can sign out from the dashboard and return to the public entry experience.",
+    "category": "Study Dashboard",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /dashboard"
+      },
+      {
+        "type": "action",
+        "description": "Sign out"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the public entry flow is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC013",
+    "title": "Search for a note and open the matching result",
+    "description": "An authenticated user can search for a note, choose a matching result, and view the selected note.",
+    "category": "Notes Browsing and File Uploads",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the study notes browsing link"
+      },
+      {
+        "type": "action",
+        "description": "Enter a note search term"
+      },
+      {
+        "type": "action",
+        "description": "Choose a matching search result"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the matching study note is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC014",
+    "title": "User can browse community posts and open a post detail view",
+    "description": "This test verifies that a signed-in user can browse the community feed and open a post to view its details.",
+    "category": "Study Dashboard",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /dashboard/community"
+      },
+      {
+        "type": "action",
+        "description": "Open a community post"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the post detail view is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC015",
+    "title": "Browse community posts and open a post",
+    "description": "An authenticated user can browse community discussions and open a post to view its details.",
+    "category": "Community Discussions",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the community discussions link"
+      },
+      {
+        "type": "action",
+        "description": "Open a post from the community feed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the post details are displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC016",
+    "title": "Student can continue an AI chat thread with a follow-up message",
+    "description": "This test verifies that a signed-in user can send a follow-up message in the same AI conversation and keep the thread going.",
+    "category": "AI Tutor and Chat",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /dashboard/ai-tutor"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the message field with an initial study question"
+      },
+      {
+        "type": "action",
+        "description": "Submit the message"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the message field with a follow-up question"
+      },
+      {
+        "type": "action",
+        "description": "Submit the message"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the conversation thread includes both messages and replies"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC017",
+    "title": "Open an author profile from a community post",
+    "description": "An authenticated user can open an author's profile from community content and view their contributions and profile information.",
+    "category": "Community Discussions",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the community discussions link"
+      },
+      {
+        "type": "action",
+        "description": "Open a post from the community feed"
+      },
+      {
+        "type": "action",
+        "description": "Open the author profile"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the author's profile information is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the author's contributions are displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC018",
+    "title": "User can review chat history and resume a prior conversation",
+    "description": "This test verifies that a signed-in user can open chat history, view previous conversations, and continue an existing discussion.",
+    "category": "AI Tutor and Chat",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /dashboard/chatbot"
+      },
+      {
+        "type": "action",
+        "description": "Open chat history"
+      },
+      {
+        "type": "action",
+        "description": "Select a previous conversation"
+      },
+      {
+        "type": "action",
+        "description": "Resume the conversation with a new message"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the selected conversation remains visible with the new reply"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC019",
+    "title": "Guest can request a password reset",
+    "description": "This test verifies that a guest can submit a password reset request and see a confirmation that it was accepted.",
+    "category": "User Authentication",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /forgot-password"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the password reset request"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a reset request confirmation is visible"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC020",
+    "title": "User can set a new password with a reset token",
+    "description": "This test verifies that a user can complete the password reset form and see confirmation that the password was updated.",
+    "category": "User Authentication",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /reset-password"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the reset token field with a valid token"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the new password field with a valid new password"
+      },
+      {
+        "type": "action",
+        "description": "Submit the password reset form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a password update confirmation is visible"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC021",
+    "title": "User can access the profile page from the dashboard",
+    "description": "This test verifies that a signed-in user can open their current profile from the dashboard and view profile details.",
+    "category": "Study Dashboard",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /dashboard/profile"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the user profile details are displayed"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC022",
+    "title": "User sees sign-in validation when credentials are invalid",
+    "description": "This test verifies that invalid login details are rejected and the user sees sign-in validation feedback.",
+    "category": "User Authentication",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with an invalid email value"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with an invalid password value"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify sign-in validation feedback is visible"
+      }
+    ],
+    "priority": "Low"
+  }
+]

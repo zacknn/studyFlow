@@ -35,7 +35,7 @@ export default function SearchBar() {
 
     router.push(`${pathname}?${params.toString()}`, { scroll: false });
     // searchParams is intentionally excluded — adding it causes an infinite loop
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [debouncedSearchTerm, pathname, router]);
 
   return (
