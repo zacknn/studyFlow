@@ -18,7 +18,7 @@ export function ChatbotShell({ activeChatId }: { activeChatId: string | null }) 
   )
 
   return (
-    <div className="flex h-[calc(100vh-20rem)] min-h-[560px] gap-6">
+    <div className="flex min-h-0 flex-col gap-3 sm:h-[calc(100vh-20rem)] sm:min-h-[560px] sm:flex-row sm:gap-6">
       <ChatSidebar activeChatId={activeChatId} onActiveChatDeleted={() => goToChat(null)} />
       <ChatWindow key={activeChatId ?? "new"} chatId={activeChatId} onChatCreated={goToChat} />
     </div>

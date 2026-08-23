@@ -151,10 +151,10 @@ export default function Navbar() {
           >
             Browse Notes
           </Link>
-          <Link href="#" onClick={() => setMenuOpen(false)}>
+          <Link href="/dashboard/chatbot" onClick={() => setMenuOpen(false)}>
             AI Tutor
           </Link>
-          <Link href="#" onClick={() => setMenuOpen(false)}>
+          <Link href="/dashboard/community" onClick={() => setMenuOpen(false)}>
             Community
           </Link>
           {session ? (

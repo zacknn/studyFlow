@@ -35,6 +35,24 @@ export function useCreateDiscussion() {
   )
 }
 
+export function useUpdateDiscussion() {
+  const queryClient = useQueryClient()
+  return useMutation(
+    orpc.Discussion.update.mutationOptions({
+      onSuccess: (_, variables) => {
+        queryClient.invalidateQueries({
+          queryKey: orpc.Discussion.getById.key({
+            input: { id: variables.id }
+          })
+        })
+        queryClient.invalidateQueries({
+          queryKey: orpc.Discussion.list.key()
+        })
+      }
+    })
+  )
+}
+
 export function useDeleteDiscussion() {
   const queryClient = useQueryClient()
   return useMutation(

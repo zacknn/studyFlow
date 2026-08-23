@@ -81,9 +81,9 @@ export function ChatWindow({
   }
 
   return (
-    <div className="flex flex-1 min-w-0 flex-col rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 overflow-hidden">
+    <div className="flex h-[min(640px,calc(100svh-15rem))] min-h-[440px] min-w-0 flex-1 flex-col overflow-hidden rounded-3xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-950 sm:h-auto sm:min-h-0">
       {/* Header, modeled on the StudyBot mockup */}
-      <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 px-5 py-4">
+      <div className="flex items-center justify-between border-b border-slate-100 bg-slate-50 px-4 py-3 dark:border-slate-800 dark:bg-slate-900 sm:px-5 sm:py-4">
         <div className="flex items-center gap-3 min-w-0">
           <div className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" />
           <span className="text-sm font-medium text-slate-600 dark:text-slate-300 truncate">{title}</span>
@@ -93,7 +93,7 @@ export function ChatWindow({
 
       {/* Messages */}
       <div className="flex-1 overflow-y-auto">
-        <div className="mx-auto flex h-full max-w-2xl flex-col gap-5 px-5 py-6">
+        <div className="mx-auto flex h-full max-w-2xl flex-col gap-5 px-3 py-5 sm:px-5 sm:py-6">
           {isLoadingHistory ? (
             <div className="flex flex-1 items-center justify-center gap-2 text-sm text-slate-400 dark:text-slate-500">
               <Loader2 className="h-4 w-4 animate-spin" />
@@ -122,7 +122,7 @@ export function ChatWindow({
       </div>
 
       {/* Input, styled after the mockup's input bar */}
-      <div className="border-t border-slate-100 dark:border-slate-800 p-4">
+      <div className="border-t border-slate-100 p-3 dark:border-slate-800 sm:p-4">
         <div className="mx-auto max-w-2xl">
           <div className="relative">
             <textarea

@@ -32,8 +32,8 @@ export function ChatSidebar({
   }
 
   return (
-    <aside className="flex w-72 shrink-0 flex-col rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 overflow-hidden">
-      <div className="p-4 border-b border-slate-100 dark:border-slate-800">
+    <aside className="flex h-44 w-full shrink-0 flex-col overflow-hidden rounded-3xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900 sm:h-auto sm:w-72">
+      <div className="border-b border-slate-100 p-3 dark:border-slate-800 sm:p-4">
         <Link
           href="/dashboard/chatbot"
           className="flex w-full items-center justify-center gap-2 rounded-xl bg-rose-500 hover:bg-rose-600 text-white font-medium py-2.5 text-sm shadow-md shadow-rose-200 dark:shadow-none transition-all active:scale-[0.98]"
@@ -97,7 +97,7 @@ export function ChatSidebar({
               </button>
             </div>
             <p className="text-sm text-slate-500 dark:text-slate-400 mb-6">
-              This removes the chat and its messages. This can't be undone.
+              This removes the chat and its messages. This can&apos;t be undone.
             </p>
             <div className="flex justify-end gap-3">
               <button
