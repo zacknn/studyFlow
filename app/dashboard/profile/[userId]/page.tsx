@@ -14,25 +14,27 @@ export default async function ProfilePage({ params }: PageProps) {
   try {
     const postsData = await getUserPosts(userId);
 
-    
-
-    // Get user info from the first post if available
     const userInfo = postsData.data[0]?.author;
 
     if (!userInfo) {
       notFound();
     }
 
-    // Calculate aggregate stats from all posts
     const stats = {
       totalPosts: postsData.data.length,
-      totalViews: postsData.data.reduce((sum: number, post) => sum + post.views, 0),
-      totalLikes: postsData.data.reduce((sum: number, post) => sum + post.likes, 0),
+      totalViews: postsData.data.reduce((sum: number, post) => sum + (post.views || 0), 0),
+      totalLikes: postsData.data.reduce((sum: number, post) => sum + (post.likes || 0), 0),
     };
 
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-950 py-8 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-6xl mx-auto">
+      <div className="relative min-h-screen bg-slate-50 dark:bg-slate-950 py-10 md:py-16 px-4 sm:px-6 lg:px-8 overflow-hidden">
+        {/* Ambient background glows */}
+        <div className="fixed inset-0 pointer-events-none">
+          <div className="absolute top-[-5%] left-[-5%] w-[400px] h-[400px] bg-rose-500/[0.03] dark:bg-rose-500/[0.05] rounded-full blur-3xl" />
+          <div className="absolute bottom-[10%] right-[-5%] w-[350px] h-[350px] bg-slate-500/[0.02] dark:bg-slate-500/[0.04] rounded-full blur-3xl" />
+        </div>
+
+        <div className="relative max-w-6xl mx-auto">
           <ProfileContent
             user={userInfo}
             posts={postsData.data}
@@ -47,4 +49,4 @@ export default async function ProfilePage({ params }: PageProps) {
   }
 }
 
-export const revalidate = 60; // Revalidate every 60 seconds
+export const revalidate = 60;
