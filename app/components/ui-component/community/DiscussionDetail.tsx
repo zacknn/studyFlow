@@ -1,8 +1,9 @@
 "use client"
+import Image from "next/image"
 import { motion } from "framer-motion"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { ArrowLeft, Tag, Trash2, Pencil, Loader2, MessageSquare } from "lucide-react"
+import { ArrowLeft, Tag, Trash2, Pencil, MessageSquare } from "lucide-react"
 import { useGetDiscussion, useDeleteDiscussion } from "@/app/lib/queries/discussion.queries"
 import { CommentCard } from "./CommentCard"
 import { CommentForm } from "./CommentForm"
@@ -77,9 +78,12 @@ export function DiscussionDetail({ discussionId }: { discussionId: string }) {
           <div className="flex items-start justify-between gap-4 mb-4">
             <div className="flex items-center gap-3">
               {discussion.author.image ? (
-                <img
+                <Image
                   src={discussion.author.image}
                   alt={discussion.author.name ?? "User"}
+                  width={40}
+                  height={40}
+                  unoptimized
                   className="w-10 h-10 rounded-full object-cover border-2 border-rose-500"
                 />
               ) : (

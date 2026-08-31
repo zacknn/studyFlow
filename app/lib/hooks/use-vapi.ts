@@ -1,5 +1,5 @@
 "use client"
-import { useEffect, useRef, useState, useCallback } from "react"
+import { useEffect, useRef, useState } from "react"
 import Vapi from "@vapi-ai/web"
 
 interface Message {
@@ -41,20 +41,20 @@ export function useVapi() {
     })
 
     // live transcript
-    vapi.on("message", (message: any) => {
+    vapi.on("message", (message: Record<string, unknown>) => {
       if (
         message.type === "transcript" &&
         message.transcriptType === "final"
       ) {
         setTranscript(prev => [...prev, {
-          role: message.role,
-          text: message.transcript,
+          role: message.role as "user" | "assistant",
+          text: message.transcript as string,
         }])
       }
     })
 
     // errors
-    vapi.on("error", (err: any) => {
+    vapi.on("error", (err: Error | Record<string, unknown>) => {
       console.error("Vapi error:", err)
       setError("Call failed. Please try again.")
       setIsLoading(false)

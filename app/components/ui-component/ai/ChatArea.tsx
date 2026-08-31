@@ -38,7 +38,7 @@ export function ChatArea({ chatId, onChatCreated }: ChatAreaProps) {
       const title = firstUser?.parts?.find((p) => p.type === "text")?.text?.slice(0, 50) ?? "New Chat"
       onChatCreated(hookChatId, title)
     }
-  }, [hookChatId, chatId, onChatCreated])
+  }, [hookChatId, chatId, messages, onChatCreated])
 
   // Load existing chat from DB (once per chatId)
   useEffect(() => {
@@ -64,10 +64,10 @@ export function ChatArea({ chatId, onChatCreated }: ChatAreaProps) {
     }
   }, [chatId, resetChat])
 
-  // Auto-scroll
+  // Auto-scroll when the message list updates.
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" })
-  }, [messages])
+  }, [messages.length])
 
   const handleSend = (text: string, fileUrl?: string) => {
     const content = fileUrl ? `${text}\n\n[File: ${fileUrl}]` : text

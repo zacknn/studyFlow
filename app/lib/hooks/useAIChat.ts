@@ -2,34 +2,35 @@
 
 import { useChat } from "@ai-sdk/react"
 import { DefaultChatTransport } from "ai"
-import { useState, useCallback, useRef, useEffect } from "react"
+import { useState, useRef, useEffect, useCallback, useMemo } from "react"
 
 export function useAIChat() {
   const [chatId, setChatId] = useState<string | null>(null)
-  const chatIdRef = useRef<string | null>(null)
 
-  useEffect(() => {
-    chatIdRef.current = chatId
-  }, [chatId])
-
-  const chat = useChat({
-    transport: new DefaultChatTransport({
-      api: "/api/ai/chat",
-      prepareSendMessagesRequest: ({ messages }) => ({
-        body: {
-          messages,
-          chatId: chatIdRef.current,
+  const transport = useMemo(
+    () =>
+      new DefaultChatTransport({
+        api: "/api/ai/chat",
+        prepareSendMessagesRequest: ({ messages }) => ({
+          body: {
+            messages,
+            chatId,
+          },
+        }),
+        fetch: async (url, options) => {
+          const response = await fetch(url, options)
+          const newChatId = response.headers.get("X-Chat-Id")
+          if (newChatId && newChatId !== chatId) {
+            setChatId(newChatId)
+          }
+          return response
         },
       }),
-      fetch: async (url, options) => {
-        const response = await fetch(url, options)
-        const newChatId = response.headers.get("X-Chat-Id")
-        if (newChatId && newChatId !== chatIdRef.current) {
-          setChatId(newChatId)
-        }
-        return response
-      },
-    }),
+    [chatId],
+  )
+
+  const chat = useChat({
+    transport,
   })
 
   // Stable resetChat — no dependency on changing `chat` object
@@ -40,7 +41,6 @@ export function useAIChat() {
 
   const resetChat = useCallback(() => {
     setChatId(null)
-    chatIdRef.current = null
     setMessagesRef.current([])
   }, [])
 

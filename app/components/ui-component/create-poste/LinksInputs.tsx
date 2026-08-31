@@ -41,7 +41,7 @@ export function LinksInput({ links, onChange }: { links: LinkEntry[]; onChange: 
 
   return (
     <div className="space-y-3">
-      {links.map((link, i) => (
+      {links.map((link) => (
         <div key={link.id} className="border border-slate-200 dark:border-slate-700 rounded-xl p-4">
           <div className="space-y-3">
             <div>

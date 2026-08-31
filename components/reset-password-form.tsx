@@ -36,8 +36,11 @@ export function ResetPasswordForm({
 
   useEffect(() => {
     if (!token) {
-      setIsTokenValid(false);
-      setError("Invalid or missing reset token. Please request a new password reset.");
+      const markInvalid = () => {
+        setIsTokenValid(false);
+        setError("Invalid or missing reset token. Please request a new password reset.");
+      };
+      markInvalid();
     }
   }, [token]);
 
@@ -58,7 +61,7 @@ export function ResetPasswordForm({
     setIsLoading(true);
 
     try {
-      const { error } = await authClient.resetPassword(
+      await authClient.resetPassword(
         {
           token: token!,
           newPassword: password,
@@ -77,11 +80,11 @@ export function ResetPasswordForm({
           },
         }
       );
-    } catch (err: any) {
-      setError(
-        err.message ||
-          "Failed to reset password. The link may have expired. Please try again."
-      );
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error 
+        ? err.message 
+        : "Failed to reset password. The link may have expired. Please try again.";
+      setError(errorMessage);
       setIsLoading(false);
     }
   }

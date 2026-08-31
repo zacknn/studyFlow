@@ -11,7 +11,7 @@ export const FileUpload = {
     image: { maxFileSize: "8MB", maxFileCount: 10 },
     text: { maxFileSize: "4MB", maxFileCount: 10 },
   })
-    .middleware(async ({ req }) => {
+    .middleware(async () => {
       const session = await auth.api.getSession({ headers: await headers() });
 
       if (!session?.user) throw new UploadThingError("Unauthorized");

@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { Eye, Heart, FileText, MapPin, Calendar, ArrowRight } from "lucide-react";
+import { Eye, Heart, FileText, MapPin, Calendar } from "lucide-react";
 import Card from "../ui-component/Card";
 import type { Post } from "@/app/schemas/posts.schemas";
 
@@ -172,7 +172,7 @@ export function ProfileContent({ user, posts, stats }: ProfileContentProps) {
                 No posts yet
               </p>
               <p className="text-slate-400 dark:text-slate-500 text-sm mt-1">
-                {firstName} hasn't shared any study materials.
+                {firstName} hasn&apos;t shared any study materials.
               </p>
             </div>
           ) : (

@@ -75,7 +75,7 @@ export default async function DashboardPage() {
             <span className="text-rose-500">{firstName}</span>
           </h1>
           <p className="text-lg text-slate-500 dark:text-slate-400 mt-2 max-w-xl">
-            Here's what's happening with your study materials.
+            Here&apos;s what&apos;s happening with your study materials.
           </p>
         </div>
 

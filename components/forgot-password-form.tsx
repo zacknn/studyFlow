@@ -34,7 +34,7 @@ export function ForgotPasswordForm({
     setIsLoading(true);
 
     try {
-      const { error } = await authClient.requestPasswordReset(
+      await authClient.requestPasswordReset(
         {
           email,
           redirectTo: `${window.location.origin}/reset-password`,
@@ -49,8 +49,9 @@ export function ForgotPasswordForm({
           },
         }
       );
-    } catch (err: any) {
-      setError(err.message || "Failed to send reset email. Please try again.");
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : "Failed to send reset email. Please try again.";
+      setError(errorMessage);
       setIsLoading(false);
     }
   }

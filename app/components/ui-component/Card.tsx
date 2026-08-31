@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Image from "next/image";
 import { Eye, Heart, FileText, Link as LinkIcon, Tag } from "lucide-react";
 import type { Post } from "@/app/schemas/posts.schemas";
 import { AuthorBadge } from "./AuthorBadge";

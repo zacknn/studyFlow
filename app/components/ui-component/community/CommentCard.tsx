@@ -1,8 +1,8 @@
 "use client"
+import Image from "next/image"
 import { useState } from "react"
 import { motion } from "framer-motion"
 import { Trash2, Pencil, Check, X } from "lucide-react"
-import { AuthorBadge } from "@/app/components/ui-component/AuthorBadge"
 import { useDeleteComment } from "@/app/lib/queries/discussion.queries"
 import { authClient } from "@/app/lib/auth-client"
 import type { Comment } from "@/app/schemas/discussion.schemas"
@@ -34,9 +34,12 @@ export function CommentCard({
       {/* Left — avatar */}
       <div className="shrink-0 pt-1">
         {comment.author.image ? (
-          <img
+          <Image
             src={comment.author.image}
             alt={comment.author.name ?? "User"}
+            width={32}
+            height={32}
+            unoptimized
             className="w-8 h-8 rounded-full object-cover border border-slate-200 dark:border-slate-700"
           />
         ) : (

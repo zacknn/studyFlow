@@ -47,11 +47,14 @@ export default function EditPostPage() {
   // pre-fill form when post loads
   useEffect(() => {
     if (post) {
-      setTitle(post.title);
-      setDescription(post.description ?? "");
-      setType(post.type ?? "");
-      setIsPublic(post.isPublic);
-      setTags(post.tags);
+      const fillForm = () => {
+        setTitle(post.title);
+        setDescription(post.description ?? "");
+        setType(post.type ?? "");
+        setIsPublic(post.isPublic);
+        setTags(post.tags);
+      };
+      fillForm();
     }
   }, [post]);
 

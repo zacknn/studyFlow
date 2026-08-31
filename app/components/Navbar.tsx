@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import {
   BookOpen,
   Moon,
@@ -26,10 +27,14 @@ export default function Navbar() {
   const { data: session } = authClient.useSession();
 
   useEffect(() => {
-    setMounted(true);
     const onScroll = () => setScrolled(window.scrollY > 10);
     window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
+    // Use a timeout to defer state update and avoid cascading renders
+    const mountTimer = setTimeout(() => setMounted(true), 0);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      clearTimeout(mountTimer);
+    };
   }, []);
 
   const navLinks = [
@@ -99,9 +104,12 @@ export default function Navbar() {
             <div className="hidden md:flex items-center gap-3">
               <div className="relative group">
                 {session.user.image ? (
-                  <img
+                  <Image
                     src={session.user.image}
                     alt={session.user.name || "User"}
+                    width={36}
+                    height={36}
+                    unoptimized
                     className="w-9 h-9 rounded-full object-cover border-2 border-rose-500 hover:border-rose-600 transition-all duration-300 cursor-pointer hover:scale-105"
                   />
                 ) : (

@@ -162,7 +162,7 @@ export const GetPostById = os.Post.getById
 
 export const ListPosts = os.Post.list.handler(async ({ input }) => {
   const { page = 1, limit = 12, search, type, tag, isPublic, authorId } = input;
-  const where: any = {};
+  const where: Record<string, unknown> = {};
 
   if (isPublic !== undefined) {
     where.isPublic = isPublic;

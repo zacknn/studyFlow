@@ -168,9 +168,13 @@ function FileUploadContent({ className, ...props }: FileUploadContentProps) {
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
-    setMounted(true)
-    return () => setMounted(false)
-  }, [])
+    // Defer state update to avoid cascading renders
+    const mountTimer = setTimeout(() => setMounted(true), 0);
+    return () => {
+      setMounted(false);
+      clearTimeout(mountTimer);
+    };
+  }, []);
 
   if (!context?.isDragging || !mounted || context?.disabled) {
     return null

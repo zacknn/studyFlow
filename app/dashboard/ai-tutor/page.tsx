@@ -1,8 +1,3 @@
-import { AIChatContainer } from "@/app/components/ui-component/ai/AIChatContainer";
-import { auth } from "@/app/lib/auth";
-import { headers } from "next/headers";
-import prisma from "@/app/lib/prisma";
-
 export default async function AITutorPage() {
   {
     /*

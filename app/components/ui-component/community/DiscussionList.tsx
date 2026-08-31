@@ -1,7 +1,7 @@
 "use client"
 import { useListDiscussions } from "@/app/lib/queries/discussion.queries"
 import { DiscussionCard } from "./DiscussionCard"
-import { Loader2, MessageSquare } from "lucide-react"
+import { MessageSquare } from "lucide-react"
 import { useDebounce } from "@/app/lib/hooks/useDebounce"
 
 interface DiscussionListProps {

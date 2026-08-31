@@ -15,7 +15,10 @@ export default function SearchBar() {
   // Use a ref so the effect can always read the latest searchParams
   // without subscribing to it (avoids the infinite re-render loop)
   const searchParamsRef = useRef(searchParams);
-  searchParamsRef.current = searchParams;
+  
+  useEffect(() => {
+    searchParamsRef.current = searchParams;
+  }, [searchParams]);
 
   // Use the new reusable debounce hook
   const debouncedSearchTerm = useDebounce(searchTerm, 400);

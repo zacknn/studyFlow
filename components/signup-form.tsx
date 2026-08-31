@@ -31,7 +31,7 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
       return;
     }
 
-    const { data, error } = await authClient.signUp.email(
+    await authClient.signUp.email(
       {
         name: fullName,
         email,
@@ -39,10 +39,10 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
         callbackURL: "/dashboard",
       },
       {
-        onRequest: (ctx) => {
-          console.log("Signup request started", ctx);
+        onRequest: () => {
+          console.log("Signup request started");
         },
-        onSuccess: (ctx) => {
+        onSuccess: () => {
           router.push("/dashboard");
         },
         onError: (ctx) => {

@@ -6,7 +6,7 @@ import { Bot, UploadCloud, Mic, MoreHorizontal, Send } from "lucide-react";
 export default function InteractiveDemo() {
   const [typedText, setTypedText] = useState("");
   const fullText =
-    'Explain quantum entanglement like I\'m five."';
+    "Explain quantum entanglement like I&apos;m five.\"";
 
   useEffect(() => {
     let i = 0;
@@ -35,7 +35,7 @@ export default function InteractiveDemo() {
               <span className="inline-block w-0.5 h-8 bg-rose-500 ml-1 animate-pulse align-middle" />
             </h2>
             <p className="text-lg text-slate-500 dark:text-slate-400 leading-relaxed">
-              Experience the power of our context-aware AI. Whether it's
+              Experience the power of our context-aware AI. Whether it&apos;s
               analyzing uploaded lecture slides or answering voice queries, help
               is just a click away.
             </p>
@@ -80,7 +80,7 @@ export default function InteractiveDemo() {
                     <Bot className="w-4 h-4 text-slate-600 dark:text-slate-300" />
                   </div>
                   <div className="bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 px-4 py-3 rounded-2xl rounded-tl-sm text-sm max-w-[85%]">
-                    <p className="mb-2 font-medium">Here's the summary:</p>
+                    <p className="mb-2 font-medium">Here&apos;s the summary:</p>
                     <ul className="list-disc list-inside space-y-1 opacity-80">
                       <li>Light-dependent reactions occur in thylakoids.</li>
                       <li>Calvin cycle takes place in the stroma.</li>

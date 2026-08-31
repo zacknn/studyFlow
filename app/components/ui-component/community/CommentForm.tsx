@@ -1,4 +1,5 @@
 "use client"
+import Image from "next/image"
 import { useState } from "react"
 import { Loader2, Send } from "lucide-react"
 import { useCreateComment } from "@/app/lib/queries/discussion.queries"
@@ -37,9 +38,12 @@ export function CommentForm({ discussionId }: { discussionId: string }) {
       {/* Avatar */}
       <div className="shrink-0 pt-1">
         {session.user.image ? (
-          <img
+          <Image
             src={session.user.image}
             alt={session.user.name ?? "You"}
+            width={32}
+            height={32}
+            unoptimized
             className="w-8 h-8 rounded-full object-cover border border-slate-200 dark:border-slate-700"
           />
         ) : (
@@ -56,10 +60,10 @@ export function CommentForm({ discussionId }: { discussionId: string }) {
         <textarea
           value={content}
           onChange={e => setContent(e.target.value)}
-          onKeyDown={e => {
+          onKeyDown={(e: React.KeyboardEvent<HTMLTextAreaElement>) => {
             if (e.key === "Enter" && !e.shiftKey) {
               e.preventDefault()
-              handleSubmit(e as any)
+              handleSubmit(e as unknown as React.FormEvent)
             }
           }}
           placeholder="Write a comment... (Shift+Enter for new line)"

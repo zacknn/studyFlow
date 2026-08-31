@@ -16,7 +16,7 @@ export function PostDetail({ id }: { id: string }) {
   // increment views once when page loads
   useEffect(() => {
     incrementViews({ id });
-  }, [id]);
+  }, [id, incrementViews]);
 
   if (isLoading) return <PostDetailSkeleton />;
 
