@@ -10,15 +10,14 @@ export const PostTypeEnum = z.enum(["tutorial", "reference"]);
    Shared Fields
 ========================================================= */
 
-const postTitle = z.string().min(1).max(200);
+const idSchema = z.string().min(1).max(255);
+const postTitle = z.string().min(1).max(200)
+  .refine((value) => value.trim().length > 0, "Title cannot be blank");
 const postDescription = z.string().max(5000).optional();
 const postType = PostTypeEnum.optional();
-const postIsPublic = z.boolean().optional().default(true);
-const postTags = z
-  .array(z.string().min(1).max(50))
-  .max(20)
-  .optional()
-  .default([]);
+const postTags = z.array(
+  z.string().min(1).max(50).refine((value) => value.trim().length > 0, "Tags cannot be blank"),
+).max(20);
 
 /* =========================================================
    Related Entities (Read Only)
@@ -82,8 +81,8 @@ export const CreatePostInputSchema = z.object({
   title: postTitle,
   description: postDescription,
   type: postType,
-  isPublic: postIsPublic,
-  tags: postTags,
+  isPublic: z.boolean().optional().default(true),
+  tags: postTags.optional().default([]),
 });
 
 export type CreatePostInput = z.infer<typeof CreatePostInputSchema>;
@@ -93,12 +92,12 @@ export type CreatePostInput = z.infer<typeof CreatePostInputSchema>;
 ========================================================= */
 
 export const UpdatePostInputSchema = z.object({
-  id: z.string(),
+  id: idSchema,
   title: postTitle.optional(),
   description: postDescription,
   type: postType,
-  isPublic: postIsPublic,
-  tags: postTags,
+  isPublic: z.boolean().optional(),
+  tags: postTags.optional(),
 });
 
 export type UpdatePostInput = z.infer<typeof UpdatePostInputSchema>;
@@ -108,7 +107,7 @@ export type UpdatePostInput = z.infer<typeof UpdatePostInputSchema>;
 ========================================================= */
 
 export const DeletePostInputSchema = z.object({
-  id: z.string(),
+  id: idSchema,
 });
 
 export type DeletePostInput = z.infer<typeof DeletePostInputSchema>;
@@ -118,7 +117,7 @@ export type DeletePostInput = z.infer<typeof DeletePostInputSchema>;
 ========================================================= */
 
 export const GetPostByIdInputSchema = z.object({
-  id: z.string(),
+  id: idSchema,
 });
 
 export type GetPostByIdInput = z.infer<typeof GetPostByIdInputSchema>;
@@ -136,13 +135,15 @@ export type PostOutput = z.infer<typeof PostOutputSchema>;
 ========================================================= */
 
 export const ListPostsInputSchema = z.object({
-  page: z.coerce.number().int().positive().default(1),
+  page: z.coerce.number().int().safe().positive().default(1),
   limit: z.coerce.number().int().positive().max(100).default(10),
   type: PostTypeEnum.optional(),
-  authorId: z.string().optional(),
-  isPublic: z.coerce.boolean().optional(),
-  tag: z.string().optional(),
-  search: z.string().trim().optional(),
+  authorId: idSchema.optional(),
+  isPublic: z.union([z.boolean(), z.stringbool()]).optional(),
+  tag: z.string().min(1).max(50).optional(),
+  search: z.string().max(200)
+    .refine((value) => value.trim().length > 0, "Search cannot be blank")
+    .optional(),
 });
 
 export type ListPostsInput = z.infer<typeof ListPostsInputSchema>;
@@ -163,13 +164,13 @@ export type PaginatedPosts = z.infer<typeof PaginatedPostsSchema>;
 
 
 export const IncrementPostLikesInputSchema = z.object({
-  id: z.string(),
+  id: idSchema,
 })
 
 export const IncrementPostViewsInputSchema = z.object({
-  id: z.string(),
+  id: idSchema,
 })
 
 export const PostMutationOutputSchema = z.object({
-  id: z.string(),
+  id: idSchema,
 })

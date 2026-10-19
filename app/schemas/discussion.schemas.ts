@@ -1,61 +1,68 @@
 import { z } from "zod"
 
+const idSchema = z.string().min(1).max(255)
 const discussionTitle = z.string().min(1).max(300)
+  .refine((value) => value.trim().length > 0, "Title cannot be blank")
 const discussionContent = z.string().min(1).max(10000)
-const discussionTags = z.array(z.string().min(1).max(50)).max(10).optional().default([])
+  .refine((value) => value.trim().length > 0, "Content cannot be blank")
+const discussionTags = z.array(
+  z.string().min(1).max(50).refine((value) => value.trim().length > 0, "Tags cannot be blank"),
+).max(10)
 
 export const CreateDiscussionInputSchema = z.object({
   title: discussionTitle,
   content: discussionContent,
-  tags: discussionTags,
+  tags: discussionTags.optional().default([]),
 })
 
 export const UpdateDiscussionInputSchema = z.object({
-  id: z.string(),
+  id: idSchema,
   title: discussionTitle.optional(),
   content: discussionContent.optional(),
-  tags: discussionTags,
+  tags: discussionTags.optional(),
 })
 
 export const DeleteDiscussionInputSchema = z.object({
-  id: z.string(),
+  id: idSchema,
 })
 
 export const GetDiscussionByIdInputSchema = z.object({
-  id: z.string(),
+  id: idSchema,
 })
 
 export const ListDiscussionsInputSchema = z.object({
-  page: z.number().int().positive().default(1),
+  page: z.number().int().safe().positive().default(1),
   limit: z.number().int().positive().max(50).default(10),
-  tag: z.string().optional(),
-  authorId: z.string().optional(),
-  search: z.string().optional(),
+  tag: z.string().min(1).max(50).optional(),
+  authorId: idSchema.optional(),
+  search: z.string().max(200)
+    .refine((value) => value.trim().length > 0, "Search cannot be blank")
+    .optional(),
 })
 
 // output schemas
 export const CommentAuthorSchema = z.object({
-  id: z.string(),
+  id: idSchema,
   name: z.string().nullable(),
   image: z.string().nullable(),
 })
 
 export const CommentSchema = z.object({
-  id: z.string(),
+  id: idSchema,
   content: z.string(),
-  authorId: z.string(),
+  authorId: idSchema,
   author: CommentAuthorSchema,
-  discussionId: z.string(),
+  discussionId: idSchema,
   createdAt: z.date(),
   updatedAt: z.date(),
 })
 
 export const DiscussionSchema = z.object({
-  id: z.string(),
+  id: idSchema,
   title: z.string(),
   content: z.string(),
   tags: z.array(z.string()),
-  authorId: z.string(),
+  authorId: idSchema,
   author: CommentAuthorSchema,
   comments: z.array(CommentSchema),
   createdAt: z.date(),
@@ -63,11 +70,11 @@ export const DiscussionSchema = z.object({
 })
 
 export const DiscussionSummarySchema = z.object({
-  id: z.string(),
+  id: idSchema,
   title: z.string(),
   content: z.string(),
   tags: z.array(z.string()),
-  authorId: z.string(),
+  authorId: idSchema,
   author: CommentAuthorSchema,
   commentCount: z.number().int(),
   createdAt: z.date(),
@@ -82,7 +89,7 @@ export const PaginatedDiscussionsSchema = z.object({
 })
 
 export const MutationOutputSchema = z.object({
-  id: z.string(),
+  id: idSchema,
 })
 
 export type Discussion = z.infer<typeof DiscussionSchema>

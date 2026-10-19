@@ -1,20 +1,25 @@
 import z from "zod"
+
+const idSchema = z.string().min(1).max(255)
+const httpsUrl = z.url({ protocol: /^https?$/i }).max(2048)
+const linkLabel = z.string().min(1).max(255)
+
 export const CreateLinkInputSchema = z.object({
-  postId: z.string(),
-  url: z.url(),
-  label: z.string().min(1).optional(),
+  postId: idSchema,
+  url: httpsUrl,
+  label: linkLabel.optional(),
 })
 
 export const UpdateLinkInputSchema = z.object({
-  id: z.string(),
-  url: z.url().optional(),
-  label: z.string().min(1).optional(),
+  id: idSchema,
+  url: httpsUrl.optional(),
+  label: linkLabel.optional(),
 })
 
 export const DeleteLinkInputSchema = z.object({
-  id: z.string(),
+  id: idSchema,
 })
 
 export const LinkOutputSchema = z.object({
-  id: z.string(),
+  id: idSchema,
 })
