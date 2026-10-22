@@ -1,15 +1,18 @@
 "use client"
 import { useRef, useState } from "react"
 import { FileEntry } from "@/app/types"
-import { Upload, FileText, X, Loader2 } from "lucide-react"
+import { Upload, FileText, X, Loader2, AlertTriangle } from "lucide-react"
 import { useUploadThing } from "@/app/lib/uploadthing"
 import { formatSize } from "@/app/lib/format_size"
+import { ACCEPTED_UPLOAD_DESCRIPTION, getUnsupportedUploadFiles, isAllowedUploadFile } from "@/app/lib/file-upload"
+
 export function FilesInput({ files, onChange }: {
   files: FileEntry[]
   onChange: (files: FileEntry[]) => void
 }) {
   const inputRef = useRef<HTMLInputElement>(null)
   const [isUploading, setIsUploading] = useState(false)
+  const [warning, setWarning] = useState<string | null>(null)
 
   const { startUpload } = useUploadThing("postFile", {
     onClientUploadComplete: (res) => {
@@ -29,12 +32,26 @@ export function FilesInput({ files, onChange }: {
       setIsUploading(false)
     },
   })
-  
+
   async function handleFiles(e: React.ChangeEvent<HTMLInputElement>) {
     const selected = Array.from(e.target.files ?? [])
     if (!selected.length) return
+
+    const rejected = getUnsupportedUploadFiles(selected)
+    if (rejected.length > 0) {
+      setWarning(`${rejected.map(file => file.name).join(", ")} cannot be uploaded. ${ACCEPTED_UPLOAD_DESCRIPTION}`)
+    } else {
+      setWarning(null)
+    }
+
+    const validFiles = selected.filter(isAllowedUploadFile)
+    if (!validFiles.length) {
+      e.target.value = ""
+      return
+    }
+
     setIsUploading(true)
-    await startUpload(selected)  
+    await startUpload(validFiles)
     e.target.value = ""
   }
 
@@ -44,7 +61,13 @@ export function FilesInput({ files, onChange }: {
 
   return (
     <div className="space-y-3">
-      {/* Drop zone */}
+      {warning && (
+        <div role="alert" className="flex items-start gap-2 rounded-xl border border-amber-300 bg-amber-50 px-3 py-2 text-sm text-amber-800 dark:border-amber-700/60 dark:bg-amber-950/20 dark:text-amber-200">
+          <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
+          <span>{warning}</span>
+        </div>
+      )}
+
       <div
         onClick={() => !isUploading && inputRef.current?.click()}
         className={`border-2 border-dashed rounded-xl p-8 text-center transition group ${
@@ -65,7 +88,7 @@ export function FilesInput({ files, onChange }: {
               Click to upload files
             </p>
             <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">
-              PDF, images, documents — any format
+              PDF, images, and plain text files
             </p>
           </>
         )}
@@ -75,11 +98,11 @@ export function FilesInput({ files, onChange }: {
           multiple
           className="hidden"
           onChange={handleFiles}
+          accept=".pdf,.png,.jpg,.jpeg,.gif,.webp,.txt,.md,.csv"
           disabled={isUploading}
         />
       </div>
 
-      {/* File list */}
       {files.length > 0 && (
         <div className="space-y-2">
           {files.map(f => (
