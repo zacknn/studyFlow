@@ -1,2 +1,10 @@
-from fastapi import FastAPI , HTTPException
-from 
+from fastapi import FastAPI
+
+app = FastAPI()
+
+@app.get("/health")
+async def health():
+    return {
+        "status": "ok",
+        "service": "studyflow-ai"
+    }
