@@ -148,7 +148,7 @@ export default async function DashboardPage() {
             </div>
           </Link>
 
-          <Link href="/dashboard/ai-tutor">
+          <Link href="/dashboard/chatbot">
             <div
               className="group relative overflow-hidden flex items-center gap-5 bg-slate-900 dark:bg-slate-800 hover:bg-slate-800 dark:hover:bg-slate-700 rounded-2xl p-6 transition-all duration-500 hover:shadow-xl hover:shadow-slate-900/30 dark:hover:shadow-slate-950/50 hover:-translate-y-1 cursor-pointer animate-fade-in-up"
               style={{ animationDelay: "0.45s" }}
