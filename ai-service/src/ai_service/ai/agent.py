@@ -1,10 +1,18 @@
 from pydantic_ai import Agent
-from pydantic_ai.messages import ModelMessage, ModelRequest, ModelResponse, TextPart
+from pydantic_ai.messages import (
+    ModelMessage,
+    ModelRequest,
+    ModelResponse,
+    TextPart,
+    UserPromptPart,
+)
 from pydantic_ai.models.google import GoogleModel
 from pydantic_ai.providers.google import GoogleProvider
 
+from ..ai.prompt import TUTOR_SYSTEM_PROMPT
 from ..config import settings
 from ..shemas.chat import ChatMessage
+from .tools import calculate
 
 MAX_HISTORY = 20
 
@@ -13,7 +21,8 @@ model = GoogleModel(
     provider=GoogleProvider(api_key=settings.google_api_key),
 )
 
-agent = Agent(model=model)
+agent = Agent(model=model , instructions=TUTOR_SYSTEM_PROMPT)
+agent.tool_plain(calculate)
 
 
 def to_model_messages(history: list[ChatMessage]) -> list[ModelMessage]:
@@ -24,7 +33,7 @@ def to_model_messages(history: list[ChatMessage]) -> list[ModelMessage]:
     messages: list[ModelMessage] = []
     for msg in trimmed:
         if msg.role == "user":
-            messages.append(ModelRequest(parts=[TextPart(msg.content)]))
+            messages.append(ModelRequest(parts=[UserPromptPart(msg.content)]))
         else:
             messages.append(ModelResponse(parts=[TextPart(msg.content)]))
     return messages
