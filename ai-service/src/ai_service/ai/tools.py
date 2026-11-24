@@ -1,8 +1,10 @@
-
 import ast
 import math
 import operator
 from collections.abc import Callable
+
+from ddgs import DDGS
+from ddgs.exceptions import DDGSException
 
 MAX_EXPRESSION_LENGTH = 256
 MAX_AST_NODES = 64
@@ -84,3 +86,31 @@ def calculate(expression: str) -> str:
         raise ValueError("Expression is too complex.")
 
     return str(_evaluate(parsed.body))
+
+
+def search_web(query: str) -> list[dict]:
+    """Search the internet for information relevant to a query.
+
+    Use this tool when the user asks about recent events,
+    current information, or information that requires
+    external sources.
+
+    Args:
+        query: A clear search query describing the information needed.
+    """
+    try:
+        results = DDGS().text(
+            query,
+            max_results=3,
+        )
+    except DDGSException:
+        return []
+
+    return [
+        {
+            "title": result.get("title"),
+            "url": result.get("href"),
+            "snippet": result.get("body"),
+        }
+        for result in results
+    ]

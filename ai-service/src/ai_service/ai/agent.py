@@ -12,7 +12,7 @@ from pydantic_ai.providers.google import GoogleProvider
 from ..ai.prompt import TUTOR_SYSTEM_PROMPT
 from ..config import settings
 from ..shemas.chat import ChatMessage
-from .tools import calculate
+from .tools import calculate, search_web
 
 MAX_HISTORY = 20
 
@@ -23,7 +23,7 @@ model = GoogleModel(
 
 agent = Agent(model=model , instructions=TUTOR_SYSTEM_PROMPT)
 agent.tool_plain(calculate)
-
+agent.tool_plain(search_web)
 
 def to_model_messages(history: list[ChatMessage]) -> list[ModelMessage]:
     """Convert API history into pydantic-ai message objects."""
